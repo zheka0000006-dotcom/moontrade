@@ -31,6 +31,7 @@
           me.push = function (o) { me.emit('message', { data: JSON.stringify(o) }); };
           window.__mtFakeSock = me;
           setTimeout(function () { me.readyState = 1; me.emit('open', {}); me.push({ type: 'online_count', count: 42 }); }, 300);
+          setInterval(function () { if (me.readyState === 1) { me.push({ type: 'ping' }); window.__mtSent.length = 0; } }, 20000);
           return me;
         };
         FW.prototype = RW.prototype; FW.CONNECTING = 0; FW.OPEN = 1; FW.CLOSING = 2; FW.CLOSED = 3;
@@ -561,7 +562,18 @@
     '.mt-ptheme .tooltip-text{background:#160f2b!important;border:1px solid var(--mt-line)!important;border-radius:8px!important;color:var(--mt-ink)!important;font-family:var(--mt-font)!important;}',
     '.mt-ptheme .drop-down-modal .table td{border-color:var(--mt-line)!important;}',
     '.mt-ptheme .right-sidebar-modal .divider_live{background:transparent!important;color:var(--mt-muted)!important;font-weight:700!important;}',
-    '.mt-ptheme .modal-close,.mt-ptheme .drop-down-modal__close-icon{color:var(--mt-muted)!important;}'
+    '.mt-ptheme .modal-close,.mt-ptheme .drop-down-modal__close-icon{color:var(--mt-muted)!important;}',
+    '.mt-ptheme .chat_room_header,.mt-ptheme .chat_message_form{background:#120c27!important;border-color:var(--mt-line)!important;}',
+    '.mt-ptheme .chat_room_header{border-bottom:1px solid var(--mt-line)!important;}',
+    '.mt-ptheme .chat_message_form{border-top:1px solid var(--mt-line)!important;}',
+    '.mt-ptheme .chat_dropdown{background:#160f2b!important;border:1px solid var(--mt-line)!important;border-radius:12px!important;}',
+    '.mt-ptheme .chat_message_text{background:rgba(22,15,43,.92)!important;border:1px solid var(--mt-line)!important;}',
+    '.mt-ptheme .chat_message_top_trader{background:rgba(139,92,246,.16)!important;color:var(--mt-moon)!important;}',
+    '.mt-ptheme .chat_app textarea{background:var(--mt-night)!important;border:1px solid var(--mt-line)!important;border-radius:10px!important;color:var(--mt-ink)!important;}',
+    '.mt-ptheme .chat_app textarea:focus{border-color:var(--mt-violet)!important;}',
+    '.mt-ptheme [data-po-filter]{font-family:var(--mt-font)!important;font-weight:700!important;border-color:var(--mt-line)!important;color:var(--mt-muted)!important;background:var(--mt-night)!important;}',
+    '.mt-ptheme [data-po-filter][style*="rgb(22, 163, 74)"]{background:var(--mt-grad)!important;border-color:transparent!important;color:#fff!important;}',
+    '.mt-ptheme #po-assets-pin{background:rgba(22,15,43,.92)!important;border:1px solid var(--mt-line)!important;border-radius:8px!important;color:var(--mt-moon)!important;}'
   ].join('');
 
   var st = document.createElement('style');
