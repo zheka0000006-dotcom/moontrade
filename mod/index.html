@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Мод MoonTrade · встановлення і можливості</title>
+<meta name="description" content="Мод MoonTrade: сигнали бота за Боллінджером і SuperTrend + CCI, кнопка «Надіслати», виплати й гарячі клавіші. Встановлення на ПК, iPhone та Android за 2 хвилини, з відео.">
+<link rel="canonical" href="https://learn.moontrade.community/mod/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Мод MoonTrade · встановлення і можливості">
+<meta property="og:description" content="ПК, iPhone та Android. Код для встановлення, інструкції й відео.">
+<meta property="og:image" content="https://learn.moontrade.community/mod/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://learn.moontrade.community/mod/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#07050f">
+<link rel="icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+
+/* Layout: одна колонка уроку курсу (≈760px) з перемикачами ПК / телефон, як розділ «Трейдинг з нуля». Токени — зі стилю курсу MoonTrade Neon. */
+:root{
+  --bg:#07050f;--surface:#0f0a1e;--panel:#160f2b;--border:#2a2147;--text:#ece6ff;--muted:#a59bc9;--head:#ffffff;
+  --accent:#b46bff;--accent-solid:#7b3dff;--accent-soft:#1d1435;--bull:#3fe0a0;--bear:#ff5577;--amber:#ffb547;--blue:#5aa8ff;
+  --grid:rgba(180,107,255,.055);--glow:rgba(180,107,255,.45);
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f6f2ff;--surface:#ffffff;--panel:#f1eafc;--border:#ddd2f2;--text:#2a2140;--muted:#6b5f86;--head:#1c1430;
+  --accent:#7a3be0;--accent-solid:#6a2fd6;--accent-soft:#eee4ff;--bull:#0f9e6a;--bear:#d6264b;--amber:#b86e00;--blue:#2f6fd6;
+  --grid:rgba(122,59,224,.06);--glow:rgba(122,59,224,.25);color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f6f2ff;--surface:#ffffff;--panel:#f1eafc;--border:#ddd2f2;--text:#2a2140;--muted:#6b5f86;--head:#1c1430;
+  --accent:#7a3be0;--accent-solid:#6a2fd6;--accent-soft:#eee4ff;--bull:#0f9e6a;--bear:#d6264b;--amber:#b86e00;--blue:#2f6fd6;
+  --grid:rgba(122,59,224,.06);--glow:rgba(122,59,224,.25);color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font-family:var(--body);font-size:17px;line-height:1.7;color:var(--text);
+  background:radial-gradient(900px 600px at 88% -8%,rgba(123,61,255,.20),transparent 60%),
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 72px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/72px 100%,var(--bg);
+  padding-inline:16px;padding-block:28px 80px}
+.wrap{max-width:820px;margin:0 auto}
+h1,h2,h3{color:var(--head);text-wrap:balance;margin:0}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,48px);line-height:1.08;letter-spacing:-.01em}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),#e1b6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(22px,4vw,30px);line-height:1.2;margin-top:8px}
+h3{font-size:20px;font-weight:800;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lead{color:var(--muted);font-size:18px;max-width:62ch}
+header.top{display:grid;gap:14px;padding-bottom:22px}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;flex-wrap:wrap;padding:6px;border:1px solid var(--border);border-radius:16px;
+  background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);margin-bottom:26px}
+.tabs button,.seg button{font:inherit;font-weight:800;font-size:15px;border:0;cursor:pointer;color:var(--muted);background:transparent;border-radius:11px;padding:10px 16px;flex:1 1 auto}
+.tabs button[aria-selected="true"],.seg button[aria-selected="true"]{color:#fff;background:linear-gradient(135deg,var(--accent-solid),var(--accent))}
+.tabs button:focus-visible,.seg button:focus-visible,.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--border);border-radius:14px;background:var(--surface);flex-wrap:wrap}
+.seg button{padding:8px 14px;font-size:14px}
+section.view{display:grid;gap:30px}
+.block{display:grid;gap:14px}
+.block > p,.block li{max-width:68ch}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px 20px;display:grid;gap:12px}
+.shot{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:#0b0818;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.shot img{display:block;width:100%;height:auto}
+.shot.phone{max-width:320px;border-radius:28px;border-width:6px;border-color:#1b1433;margin-inline:auto}
+.pin{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:800 13px/1 var(--body);color:#fff;
+  background:var(--accent-solid);box-shadow:0 0 0 3px rgba(255,255,255,.9),0 4px 14px rgba(0,0,0,.5)}
+.legend{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.legend li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+.legend .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;background:var(--accent-solid)}
+.legend b{color:var(--head)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.pair > *{min-width:0}
+@media (max-width:640px){.pair{grid-template-columns:1fr}}
+.sig{display:grid;gap:10px}
+.sig .row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px 14px;border-radius:14px;background:var(--panel);border:1px solid var(--border)}
+.tag{font:700 12px/1 var(--body);padding:6px 9px;border-radius:8px;white-space:nowrap;border:1px solid}
+.tag.y{color:var(--amber);border-color:var(--amber)} .tag.b{color:var(--blue);border-color:var(--blue)} .tag.g{color:var(--bull);border-color:var(--bull)}
+.kbd{font:600 13px/1 var(--mono);padding:3px 7px;border-radius:7px;border:1px solid var(--border);background:var(--panel);color:var(--head);white-space:nowrap}
+table.keys{width:100%;border-collapse:collapse;font-size:15px}
+table.keys td{padding:9px 6px;border-bottom:1px solid var(--border);vertical-align:top}
+table.keys td:first-child{width:42%;white-space:nowrap}
+.tw{overflow-x:auto}
+ol.steps{list-style:none;padding:0;margin:0;display:grid;gap:22px;counter-reset:s}
+ol.steps > li{display:grid;gap:12px;counter-increment:s;padding-left:46px;position:relative}
+ol.steps > li::before{content:counter(s);position:absolute;left:0;top:-2px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font:800 15px/1 var(--display);color:#fff;background:linear-gradient(135deg,var(--accent-solid),var(--accent))}
+ol.steps h3{font-size:18px}
+.code{display:flex;gap:10px;align-items:stretch;border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:10px;min-width:0}
+.code pre{margin:0;flex:1;min-width:0;overflow-x:auto;font:500 13px/1.6 var(--mono);color:var(--head);white-space:pre;padding:4px 2px}
+.copy{font:800 13px var(--body);border:0;border-radius:10px;padding:0 14px;color:#fff;background:var(--accent-solid);cursor:pointer;white-space:nowrap}
+.note{border-left:3px solid var(--accent);padding:10px 14px;background:var(--accent-soft);border-radius:0 12px 12px 0;color:var(--text);font-size:15px}
+.ok{border-left-color:var(--bull)}
+details.faq{border:1px solid var(--border);border-radius:14px;background:var(--surface);padding:0 16px}
+details.faq summary{cursor:pointer;font-weight:800;color:var(--head);padding:14px 0;list-style:none}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::before{content:"+";display:inline-block;width:20px;color:var(--accent)}
+details.faq[open] summary::before{content:"–"}
+details.faq > div{padding-bottom:14px;color:var(--text);display:grid;gap:8px}
+/* ілюстрації встановлення */
+.mock{border-radius:16px;border:1px solid var(--border);background:#120c27;color:#e9e4ff;overflow:hidden;font-size:13px;line-height:1.4}
+.mock .bar{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#1b1436;border-bottom:1px solid #2c2554}
+.mock .dot{width:10px;height:10px;border-radius:50%;background:#3a3166}
+.mock .url{flex:1;min-width:0;background:#0d0a1f;border:1px solid #2c2554;border-radius:8px;padding:5px 10px;color:#a99fcc;font-family:var(--mono);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mock .ico{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;background:#2a2150;color:#cdbdff;font-weight:800;font-size:12px;flex:none}
+.mock .ico.hl{box-shadow:0 0 0 2px #fff,0 0 0 5px #8b5cf6}
+.mock .body{padding:14px;display:grid;gap:10px;position:relative;min-height:120px}
+.mock .pop{justify-self:end;width:min(260px,100%);background:#1c1542;border:1px solid #3a3070;border-radius:12px;padding:12px;display:grid;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.mock .btn{display:inline-flex;justify-content:center;align-items:center;padding:8px 12px;border-radius:9px;background:#2a2150;color:#fff;font-weight:700}
+.mock .btn.pri{background:#7b3dff}
+.mock .btn.hl{box-shadow:0 0 0 2px #fff,0 0 0 5px #8b5cf6}
+.mock .muted{color:#a99fcc}
+.mock .editor{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mock .pane{background:#0d0a1f;border:1px solid #2c2554;border-radius:10px;padding:10px;min-height:90px;font-family:var(--mono);font-size:11px;color:#cdbdff;overflow:hidden;word-break:break-all}
+.mock .pane.hl{box-shadow:0 0 0 2px #8b5cf6}
+.mock .phonebox{max-width:300px;margin:0 auto;border:6px solid #1b1433;border-radius:30px;overflow:hidden;background:#0d0a1f}
+.mock .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #2c2554}
+.mock .sw{width:36px;height:20px;border-radius:10px;background:#7b3dff;position:relative;flex:none}
+.mock .sw::after{content:"";position:absolute;top:3px;left:19px;width:14px;height:14px;border-radius:50%;background:#fff}
+.caption{font-size:13px;color:var(--muted)}
+@media (max-width:560px){.sig .row{grid-template-columns:1fr}.pin{width:22px;height:22px;font-size:11px}.tag{justify-self:start}}
+footer{margin-top:40px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:no-preference){.shot img{transition:transform .3s}}
+
+.vid{display:grid;gap:8px}
+.vid button{position:relative;display:block;width:100%;padding:0;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;background:#0b0818;aspect-ratio:16/9;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.vid button img{display:block;width:100%;height:100%;object-fit:cover}
+.vid .play{position:absolute;right:16px;bottom:16px;width:76px;height:54px;border-radius:16px;background:linear-gradient(135deg,var(--accent-solid),var(--accent));box-shadow:0 0 0 3px rgba(255,255,255,.85),0 10px 30px rgba(0,0,0,.5);transition:transform .2s}
+.vid .play::after{content:"";position:absolute;left:31px;top:15px;border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #fff}
+.vid button:hover .play,.vid button:focus-visible .play{transform:scale(1.08)}
+@media (max-width:560px){.vid .play{right:10px;bottom:10px;width:56px;height:40px;border-radius:12px}.vid .play::after{left:22px;top:10px;border-width:10px 0 10px 16px}}
+.vid button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.vid iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:16px;background:#000}
+.vcap{font-size:14px;color:var(--muted)}
+.vcap b{color:var(--accent);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
+
+.brand{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:26px}
+.logo{font-family:var(--display);font-weight:800;font-size:20px;color:var(--head);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--accent)}
+.nav-btn{font-weight:800;font-size:14px;text-decoration:none;color:var(--head);border:1px solid var(--border);border-radius:12px;padding:8px 14px;background:var(--surface)}
+.nav-btn:hover{border-color:var(--accent)}
+.cta{margin-top:44px;display:grid;gap:12px;padding:24px;border-radius:20px;border:1px solid var(--border);
+  background:radial-gradient(600px 300px at 100% 0,rgba(123,61,255,.22),transparent 70%),var(--surface)}
+.cta p{color:var(--muted);max-width:60ch}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.cta .btn{font-weight:800;text-decoration:none;border-radius:12px;padding:12px 18px;border:1px solid var(--border);color:var(--head);background:var(--panel)}
+.cta .btn.pri{border:0;color:#fff;background:linear-gradient(135deg,var(--accent-solid),var(--accent));box-shadow:0 8px 24px var(--glow)}
+@media (max-width:420px){.nav-btn{font-size:13px;padding:7px 10px}.cta .btn{flex:1 1 100%;text-align:center}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="brand"><a class="logo" href="https://moontrade.community/"><span>Moon</span>Trade</a><a class="nav-btn" href="https://t.me/+YTyT0nQm9A4xYWU6" target="_blank" rel="noopener">Безкоштовне навчання</a></nav>
+
+<header class="top">
+  <span class="eyebrow">MoonTrade · мод для торгівлі</span>
+  <h1>Мод <em>MoonTrade</em> для Pocket Option</h1>
+  <p class="lead">Мод показує сигнали бота за стратегіями Боллінджера і SuperTrend + CCI, дає кнопку «Надіслати», щоб ділитися угодами з командою, і прибирає з екрана все зайве. Працює на ПК, iPhone та Android.</p>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Розділи">
+  <button role="tab" id="t-inst" aria-selected="true" data-view="inst">Встановлення</button>
+  <button role="tab" id="t-use" aria-selected="false" data-view="use">Як користуватися</button>
+</nav>
+
+<!-- ============ ВСТАНОВЛЕННЯ ============ -->
+<section class="view" id="v-inst" role="tabpanel" aria-labelledby="t-inst">
+  <div class="seg" role="tablist" aria-label="Пристрій" data-group="inst">
+    <button role="tab" aria-selected="true" data-sub="ipc">ПК</button>
+    <button role="tab" aria-selected="false" data-sub="iios">iPhone</button>
+    <button role="tab" aria-selected="false" data-sub="iand">Android</button>
+  </div>
+
+  <!-- ПК -->
+  <div class="sub" data-sub="ipc" style="display:grid;gap:24px">
+
+    <p class="lead">Потрібен Google Chrome на комп'ютері. Займає 2 хвилини, робиться один раз: далі мод оновлюється сам.</p>
+    <ol class="steps">
+      <li><h3>Встанови розширення «User JavaScript and CSS»</h3>
+        <p>Відкрий сторінку розширення в Chrome Web Store і натисни «Встановити» (або «Додати в Chrome»).</p>
+        <p><a href="https://chromewebstore.google.com/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld" target="_blank" rel="noopener">Відкрити «User JavaScript and CSS» у Chrome Web Store</a></p>
+        <div class="mock"><div class="bar"><span class="dot"></span><span class="url">chromewebstore.google.com › User JavaScript and CSS</span></div>
+          <div class="body"><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="ico" style="width:44px;height:44px;font-size:15px">JS</span><div style="flex:1;min-width:140px"><b>User JavaScript and CSS</b><div class="muted">Розширення для Chrome</div></div><span class="btn pri hl">Встановити</span></div></div></div>
+      </li>
+      <li><h3>Закріпи іконку на панелі</h3>
+        <p>Натисни на іконку пазла праворуч від адресного рядка й закріпи «User JavaScript and CSS» шпилькою. Так іконку буде завжди видно.</p>
+      </li>
+      <li><h3>Відкрий Pocket Option і створи правило</h3>
+        <p>Зайди на pocketoption.com у свій акаунт. Натисни на іконку розширення, потім «Add new» (Додати). Відкриється редактор правила для pocketoption.com.</p>
+        <div class="mock"><div class="bar"><span class="dot"></span><span class="url">pocketoption.com/uk/cabinet/</span><span class="ico hl">JS</span></div>
+          <div class="body"><div class="pop"><b>pocketoption.com</b><span class="muted">Правил для сайту ще немає</span><span class="btn pri hl">+ Add new</span></div></div></div>
+      </li>
+      <li><h3>Встав код моду</h3>
+        <p>У ліве поле (JavaScript) встав цей рядок повністю:</p>
+        <div class="code"><pre id="code-pc">fetch('https://learn.moontrade.community/mod/moontrade.js',{cache:'no-store'}).then(r=>r.text()).then(js=>{new Function(js)();});</pre><button class="copy" data-copy="code-pc">Копіювати</button></div>
+        <div class="mock"><div class="bar"><span class="dot"></span><span class="url">User JavaScript and CSS · pocketoption.com</span><span class="btn pri hl" style="padding:5px 12px">Save</span></div>
+          <div class="body"><div class="editor"><div class="pane hl">JS<br>fetch('https://learn.moontrade.community/mod/moontrade.js'…</div><div class="pane">CSS</div></div></div></div>
+      </li>
+      <li><h3>Збережи й онови сторінку</h3>
+        <p>Натисни «Save», повернись на вкладку Pocket Option і онови сторінку (F5).</p>
+      </li>
+      <li><h3>Перевір</h3>
+        <p>У верхній панелі з'явились кнопки 🔊 і ☰, а внизу ліворуч — зелена крапка «онлайн». Мод працює.</p>
+      </li>
+    </ol>
+  </div>
+
+  <!-- iPhone -->
+  <div class="sub" data-sub="iios" style="display:none;gap:24px">
+
+    <p class="lead">Мод працює в Safari через безкоштовний додаток Userscripts. Потрібен iOS 15.1 або новіший.</p>
+    <ol class="steps">
+      <li><h3>Встанови Userscripts з App Store</h3>
+        <p><a href="https://apps.apple.com/app/id1463298887" target="_blank" rel="noopener">Відкрити Userscripts в App Store</a> і натисни «Завантажити». Відкрий додаток один раз після встановлення.</p>
+      </li>
+      <li><h3>Увімкни розширення в Safari</h3>
+        <p>Парамет­ри → Safari → Розширення → Userscripts: увімкни й обери «Дозволити» для всіх вебсайтів.</p>
+        <div class="mock"><div class="phonebox"><div class="row"><b>Userscripts</b><span class="sw"></span></div><div class="row"><span>Усі вебсайти</span><span class="muted">Дозволити ›</span></div><div class="row" style="border:0"><span class="muted">Парамет­ри › Safari › Розширення</span></div></div></div>
+      </li>
+      <li><h3>Відкрий посилання на мод у Safari</h3>
+        <div class="code"><pre id="code-ios">https://learn.moontrade.community/mod/moontrade-iphone.user.js</pre><button class="copy" data-copy="code-ios">Копіювати</button></div>
+        <p>Скопіюй посилання, встав в адресний рядок Safari і відкрий.</p>
+      </li>
+      <li><h3>Встанови скрипт</h3>
+        <p>Натисни «аА» (або іконку пазла) в адресному рядку → Userscripts. З'явиться пропозиція встановити скрипт: натисни її, потім «Install» / «Встановити».</p>
+        <div class="mock"><div class="phonebox"><div class="bar"><span class="url">learn.moontrade.community</span><span class="ico hl">аА</span></div><div class="body"><div class="pop" style="justify-self:center"><b>Userscripts</b><span class="muted">Userscript detected</span><span class="btn pri hl">Tap to install</span></div></div></div></div>
+      </li>
+      <li><h3>Відкрий Pocket Option</h3>
+        <p>Зайди на pocketoption.com у Safari у свій акаунт. Зліва з'явиться панель моду, а під ☰ — зелена крапка з кількістю трейдерів онлайн.</p>
+        <div class="note ok">Якщо раніше стояв інший скрипт моду, видали його в додатку Userscripts, щоб лишився один.</div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- Android -->
+  <div class="sub" data-sub="iand" style="display:none;gap:24px">
+
+    <p class="lead">Chrome на Android не підтримує розширення, тому мод встановлюється у Firefox через Violentmonkey.</p>
+    <ol class="steps">
+      <li><h3>Встанови Firefox</h3>
+        <p><a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox" target="_blank" rel="noopener">Firefox у Google Play</a> → «Встановити».</p>
+      </li>
+      <li><h3>Додай Violentmonkey</h3>
+        <p>У Firefox: меню ⋮ → «Розширення» → знайди «Violentmonkey» → «+» → «Додати». Або відкрий <a href="https://addons.mozilla.org/firefox/addon/violentmonkey/" target="_blank" rel="noopener">сторінку Violentmonkey</a> у Firefox і натисни «Додати до Firefox».</p>
+        <div class="mock"><div class="phonebox"><div class="row"><b>Розширення</b><span class="muted">⋮</span></div><div class="row"><span>Violentmonkey</span><span class="btn pri hl" style="padding:3px 10px">+</span></div></div></div>
+      </li>
+      <li><h3>Відкрий посилання на мод у Firefox</h3>
+        <div class="code"><pre id="code-and">https://learn.moontrade.community/mod/moontrade-android.user.js</pre><button class="copy" data-copy="code-and">Копіювати</button></div>
+        <p>Violentmonkey одразу покаже сторінку встановлення. Натисни «Встановити».</p>
+        <div class="mock"><div class="phonebox"><div class="body"><b>MoonTrade Mod</b><span class="muted">Встановити цей скрипт?</span><span class="btn pri hl">Встановити</span></div></div></div>
+      </li>
+      <li><h3>Відкрий Pocket Option у Firefox</h3>
+        <p>Зайди на pocketoption.com у свій акаунт. Зліва з'явиться панель моду із зеленою крапкою онлайн.</p>
+      </li>
+    </ol>
+  </div>
+
+  <div class="block">
+    <span class="eyebrow">Якщо щось не так</span>
+    <h2>Часті питання</h2>
+    <details class="faq"><summary>Мод не з'явився</summary><div>
+      <p>Онови сторінку Pocket Option. Мод з'являється через кілька секунд після того, як завантажиться графік.</p>
+      <p><b>ПК:</b> перевір, що код вставлено повністю, одним рядком, і правило збережене («Save»).</p>
+      <p><b>iPhone:</b> перевір, що Userscripts увімкнено в Парамет­рах → Safari → Розширення і дозволено для всіх вебсайтів.</p>
+      <p><b>Android:</b> сайт треба відкривати у Firefox, не в Chrome.</p></div></details>
+    <details class="faq"><summary>Кнопки моду подвоїлись</summary><div>
+      <p>Встановлено дві копії мода. Залиш одну: на ПК видали зайве правило в «User JavaScript and CSS», на телефоні — зайвий скрипт у Userscripts або Violentmonkey.</p></div></details>
+    <details class="faq"><summary>Внизу червона крапка «офлайн»</summary><div>
+      <p>Мод не з'єднався з сервером. Перевір інтернет і онови сторінку.</p></div></details>
+    <details class="faq"><summary>Немає сигналів</summary><div>
+      <p>Відкрий меню ☰ → «Сигнали» і перевір, що потрібні стратегії увімкнені. Картки з'являються лише тоді, коли бот знаходить сетап.</p></div></details>
+    <details class="faq"><summary>Немає звуку</summary><div>
+      <p>Перевір 🔊 у верхній панелі та «Звук сигналів» у меню → «Звук». Потім один раз клацни будь-де на сторінці: браузер вмикає звук лише після першої дії на сайті.</p></div></details>
+  </div>
+</section>
+
+<!-- ============ ЯК КОРИСТУВАТИСЯ ============ -->
+<section class="view" id="v-use" role="tabpanel" aria-labelledby="t-use" hidden>
+  <div class="seg" role="tablist" aria-label="Пристрій" data-group="dev">
+    <button role="tab" aria-selected="true" data-sub="pc">ПК</button>
+    <button role="tab" aria-selected="false" data-sub="ph">Телефон</button>
+  </div>
+
+  <!-- ПК -->
+  <div class="sub" data-sub="pc" style="display:grid;gap:34px">
+
+    <div class="block">
+      <span class="eyebrow">Що з'являється на екрані</span>
+      <h2>Головне вікно</h2>
+      <div class="shot">
+        <img src="img/pc_overview.jpg" alt="Pocket Option на ПК з модом MoonTrade" width="1600" height="998">
+        <span class="pin" style="left:37%;top:3.2%">1</span>
+        <span class="pin" style="left:22%;top:22%">2</span>
+        <span class="pin" style="left:44.3%;top:16.5%">3</span>
+        <span class="pin" style="left:41.6%;top:11.3%">4</span>
+        <span class="pin" style="left:67.4%;top:3.4%">5</span>
+        <span class="pin" style="left:70.5%;top:3.4%">6</span>
+        <span class="pin" style="left:66.5%;top:14.6%">7</span>
+        <span class="pin" style="left:79.5%;top:9.3%">8</span>
+        <span class="pin" style="left:8.5%;top:98%">9</span>
+      </div>
+      <ul class="legend">
+        <li><span class="n">1</span><p><b>Актив і виплата</b> великим шрифтом. Колір виплати показує, в якому вона діапазоні (налаштовується в меню, вкладка «Виплати»).</p></li>
+        <li><span class="n">2</span><p><b>Сигнали бота.</b> Картки з'являються під панеллю графіка. Натисни на картку, і відкриється цей актив. Заголовок «Сигнали бота» над картками згортає і розгортає список.</p></li>
+        <li><span class="n">3</span><p><b>Сигнали трейдерів.</b> Угоди, якими поділились інші учасники. Заголовок «Сигнали трейдерів» так само згортає список.</p></li>
+        <li><span class="n">4</span><p><b>«Надіслати».</b> Ділиться твоїм поточним активом і виплатою з командою. Кнопку можна перетягнути за ліву ручку.</p></li>
+        <li><span class="n">5</span><p><b>Звук сигналів</b> увімкнути або вимкнути одним натисканням.</p></li>
+        <li><span class="n">6</span><p><b>Меню моду</b>: сигнали, виплати, інтерфейс, звук, клавіші.</p></li>
+        <li><span class="n">7</span><p><b>Множник ×k.</b> Множить суму угоди на коефіцієнт із калькулятора суми PO.</p></li>
+        <li><span class="n">8</span><p><b>Статистика за сьогодні</b> у «Угодах»: скільки угод, плюс/мінус, вінрейт і результат.</p></li>
+        <li><span class="n">9</span><p><b>Онлайн.</b> Зелена крапка означає, що мод працює. Число показує, скільки трейдерів зараз з модом.</p></li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <span class="eyebrow">Сигнали бота</span>
+      <h2>Що означають картки</h2>
+      <p>Кожна картка показує стратегію (BB або ST+CCI), актив, напрямок угоди <b style="color:var(--bull)">CALL ↑</b> (вгору) або <b style="color:var(--bear)">PUT ↓</b> (вниз) і виплату. Колір рамки підказує, що робити.</p>
+      <div class="sig">
+        <div class="row"><span class="tag y">⚠ Можливий дотик</span><p><b>BB, жовта.</b> Ціна підходить до лінії Боллінджера. Відкрий актив і готуйся.</p></div>
+        <div class="row"><span class="tag b">🔵 Дотик живої лінії</span><p><b>BB, синя.</b> Ціна торкнулась лінії просто зараз, свічка ще не закрилась.</p></div>
+        <div class="row"><span class="tag g">✅ Перетин підтверджено</span><p><b>BB, зелена.</b> Свічка закрилась із дотиком. Це момент для входу.</p></div>
+        <div class="row"><span class="tag y">⚠ Відкат</span><p><b>ST+CCI, жовта.</b> Ціна відкотилась, сетап готується.</p></div>
+        <div class="row"><span class="tag g">✅ Вхід · 2 хв</span><p><b>ST+CCI, зелена.</b> Вхід за стратегією на 2 хвилини.</p></div>
+      </div>
+      <p class="caption">Щоб закрити картку, натисни ✕. Які стратегії показувати, обирається в меню, вкладка «Сигнали».</p>
+    </div>
+
+    <div class="block">
+      <span class="eyebrow">Поділитися угодою</span>
+      <h2>Кнопка «Надіслати»</h2>
+      <p>Відкрий угоду й натисни «Надіслати». Учасники з модом побачать картку з твоїм нікнеймом, активом і виплатою та зможуть поставити 👍 або 👎. Нікнейм задається в меню, вкладка «Сигнали».</p>
+      <div class="pair">
+        <div class="shot"><img src="img/pc_tab_signals.jpg" alt="Вкладка «Сигнали» в меню моду" width="490" height="410" loading="lazy"></div>
+        <div class="card">
+          <h3>Вкладка «Сигнали»</h3>
+          <p>Тут вмикаються сигнали від інших трейдерів, стратегія Боллінджера і SuperTrend + CCI. Внизу задається нікнейм для твоїх сигналів.</p>
+          <p class="caption">Кнопка заважає на графіку? Перетягни її за ліву ручку в зручне місце. Повернути назад можна в меню: «Інтерфейс» → «Повернути на місце».</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <span class="eyebrow">Меню ☰</span>
+      <h2>Виплати і навігація стрілками</h2>
+      <div class="pair">
+        <div class="shot"><img src="img/pc_tab_payouts.jpg" alt="Діапазони виплат" width="490" height="360" loading="lazy"></div>
+        <div class="card">
+          <p>Активи поділені на групи за виплатою. Межі груп переставляються повзунками, «+ Додати» створює ще одну межу, «× Видалити ост.» прибирає останню, «За замовч.» повертає стандартні 86/78/72/60%.</p>
+          <p>Стрілки <span class="kbd">↑</span> <span class="kbd">↓</span> перемикають активи всередині групи, <span class="kbd">←</span> <span class="kbd">→</span> переходять до іншої групи. Активи з червоної групи (найнижча виплата) стрілки пропускають.</p>
+        </div>
+      </div>
+      <div class="shot"><img src="img/pc_hud.jpg" alt="Перемикання активу стрілкою" width="800" height="499" loading="lazy"></div>
+      <p class="caption">Під час перемикання біля панелі графіка на мить з'являється підказка з активом і виплатою (HUD). Вимикається в меню, вкладка «Інтерфейс».</p>
+    </div>
+
+    <div class="block">
+      <span class="eyebrow">Меню ☰</span>
+      <h2>Інтерфейс і звук</h2>
+      <div class="pair">
+        <div class="shot"><img src="img/pc_tab_ui.jpg" alt="Вкладка «Інтерфейс»" width="490" height="499" loading="lazy"></div>
+        <div class="card">
+          <p><b>Стиль MoonTrade</b> оформлює сторінку торгівлі в кольорах MoonTrade. Графік не змінюється.</p>
+          <p><b>Чистий інтерфейс</b> ховає зайві кнопки PO. Праворуч лишаються «Угоди», «Відкладена угода», «Чат» і «Допомога».</p>
+          <p><b>Кнопка множника ×k</b> показує або ховає кнопку біля поля «Сума». Коефіцієнт k береться з калькулятора суми PO: змінив його там, і кнопка покаже нове значення.</p>
+        </div>
+      </div>
+      <div class="pair">
+        <div class="shot"><img src="img/pc_tab_sound.jpg" alt="Вкладка «Звук»" width="490" height="460" loading="lazy"></div>
+        <div class="card">
+          <p><b>Звук сигналів</b> — головний вимикач. Звук чути, навіть коли вкладка з PO неактивна.</p>
+          <p>У кожної стратегії свій звук: у Боллінджера дзвіночок, у SuperTrend + CCI м'якший тембр, у сигналів трейдерів «дінь-дон». Кнопка ▶ програє звук, щоб ти його запам'ятав.</p>
+          <p class="caption">Якщо звуку немає, один раз клацни будь-де на сторінці. Браузер дозволяє звук лише після першої дії на сайті.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <span class="eyebrow">Меню ☰ → Клавіші</span>
+      <h2>Гарячі клавіші</h2>
+      <div class="tw"><table class="keys">
+        <tr><td><span class="kbd">↑</span> <span class="kbd">↓</span></td><td>Попередній / наступний актив у групі</td></tr>
+        <tr><td><span class="kbd">←</span> <span class="kbd">→</span></td><td>Попередня / наступна група активів</td></tr>
+        <tr><td><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span> <span class="kbd">5</span> <span class="kbd">6</span> <span class="kbd">7</span></td><td>Таймфрейм M1, M2, M3, M5, M10, M15</td></tr>
+        <tr><td><span class="kbd">L</span></td><td>Горизонтальна лінія</td></tr>
+        <tr><td><span class="kbd">K</span></td><td>Прямокутник</td></tr>
+        <tr><td><span class="kbd">;</span></td><td>Лінії Фібоначчі</td></tr>
+        <tr><td><span class="kbd">⌫</span> / <span class="kbd">Del</span></td><td>Видалити останню побудову</td></tr>
+      </table></div>
+      <p>Будь-яку з них можна змінити: натисни на клавішу праворуч від дії й натисни свою комбінацію (можна з Ctrl, Alt, Shift). <span class="kbd">↺</span> повертає стандартну.</p>
+      <div class="pair">
+        <div class="shot"><img src="img/pc_custom_keys.jpg" alt="Свої клавіші" width="505" height="499" loading="lazy"></div>
+        <div class="card">
+          <h3>Свої клавіші</h3>
+          <p>«+ Додати клавішу» → обери дію зі списку: будь-який таймфрейм від S5 до D1, усі інструменти малювання, множник суми, звук, інтерфейс.</p>
+          <p>Або натисни 🎯 і клікни будь-яку кнопку на сторінці PO. Клавіша натискатиме її за тебе. Наприклад, відкривати «Угоди» на <span class="kbd">Alt+J</span>.</p>
+          <p>Потім «Задати» і натисни комбінацію.</p>
+        </div>
+      </div>
+      <div class="note">Якщо прив'язати клавішу до «Купити» або «Продати», угода відкриватиметься одразу після натискання. Мод про це попередить.</div>
+    </div>
+  </div>
+
+  <!-- ТЕЛЕФОН -->
+  <div class="sub" data-sub="ph" style="display:none;gap:34px">
+
+    <div class="block">
+      <span class="eyebrow">Що з'являється на екрані</span>
+      <h2>Панель моду</h2>
+      <div class="pair">
+        <div class="shot phone">
+          <img src="img/m_overview.jpg" alt="Pocket Option на телефоні з модом" width="540" height="1169">
+          <span class="pin" style="left:8.6%;top:38%">1</span>
+          <span class="pin" style="left:8.6%;top:46.6%">2</span>
+          <span class="pin" style="left:8.6%;top:52.2%">3</span>
+          <span class="pin" style="left:8.6%;top:58%">4</span>
+          <span class="pin" style="left:8.6%;top:65%">5</span>
+          <span class="pin" style="left:62%;top:17.2%">6</span>
+          <span class="pin" style="left:75.7%;top:74.9%">7</span>
+        </div>
+        <ul class="legend">
+          <li><span class="n">1</span><p><b>▲ ▼</b> попередній / наступний актив. Під кнопкою з'являється підказка з активом і виплатою.</p></li>
+          <li><span class="n">2</span><p><b>⋯</b> таймфрейми та інструменти малювання.</p></li>
+          <li><span class="n">3</span><p><b>📣 Надіслати.</b> Поділитися поточною угодою з командою.</p></li>
+          <li><span class="n">4</span><p><b>☰ Меню моду.</b> Під ним зелена крапка й кількість трейдерів онлайн.</p></li>
+          <li><span class="n">5</span><p><b>‹</b> згорнути панель, щоб звільнити графік.</p></li>
+          <li><span class="n">6</span><p><b>Сигнали.</b> Тут з'являються картки бота й сигнали трейдерів. Натисни на заголовок, щоб згорнути або розгорнути список. Натисни на картку, щоб відкрити актив.</p></li>
+          <li><span class="n">7</span><p><b>×2</b> — множник суми. Коефіцієнт береться з калькулятора суми PO.</p></li>
+        </ul>
+      </div>
+      <p>Кольори карток такі самі, як на ПК: жовта — готуйся, синя — дотик зараз, зелена — вхід.</p>
+    </div>
+
+    <div class="block">
+      <div class="pair">
+        <div class="shot phone"><img src="img/m_tools.jpg" alt="Таймфрейм і малювання" width="540" height="1169" loading="lazy"></div>
+        <div class="card">
+          <span class="eyebrow">Кнопка ⋯</span>
+          <h3>Таймфрейм і малювання</h3>
+          <p>Таймфрейми M1–M15 одним дотиком, «Усі ТФ» відкриває повний список. Нижче — горизонтальна лінія, тренд, прямокутник, Фібоначчі, промінь і всі побудови PO.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="pair">
+        <div class="shot phone"><img src="img/m_menu.jpg" alt="Меню моду на телефоні" width="540" height="1169" loading="lazy"></div>
+        <div class="card">
+          <span class="eyebrow">Кнопка ☰</span>
+          <h3>Меню моду</h3>
+          <p><b>Стиль MoonTrade</b> і <b>Чистий інтерфейс</b> вмикаються тут. Чистий інтерфейс ховає зайві кнопки PO внизу екрана.</p>
+          <p><b>Кнопка множника ×k</b> показує або ховає кнопку біля суми.</p>
+          <p><b>HUD</b> — підказка з активом і виплатою під час перемикання ▲ ▼.</p>
+          <p>Нижче вмикаються сигнали трейдерів і стратегії, задається нікнейм.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="pair">
+        <div class="shot phone"><img src="img/m_ranges.jpg" alt="Діапазони виплат на телефоні" width="540" height="1169" loading="lazy"></div>
+        <div class="card">
+          <span class="eyebrow">Меню ☰, внизу</span>
+          <h3>Діапазони виплат</h3>
+          <p>Перетягуй повзунки пальцем, щоб змінити межі груп. ▲ ▼ перемикають активи всередині групи, червону групу кнопки пропускають.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="pair">
+        <div class="shot phone"><img src="img/m_deals.jpg" alt="Угоди зі статистикою" width="540" height="1169" loading="lazy"></div>
+        <div class="card">
+          <span class="eyebrow">Угоди</span>
+          <h3>Статистика за сьогодні</h3>
+          <p>Угоди відкриваються з нижнього меню. Зверху видно, скільки угод за сьогодні, плюс/мінус, вінрейт і результат.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta"><span class="eyebrow">Мод — частина навчання</span><h2>Безкоштовне навчання «Трейдинг з нуля»</h2><p>Стратегії, за якими працює бот у моді, ризик-менеджмент і логіка руху ціни — 42 уроки від нуля до власної системи.</p><div class="cta-row"><a class="btn pri" href="https://t.me/+YTyT0nQm9A4xYWU6" target="_blank" rel="noopener">Отримати навчання</a><a class="btn" href="https://moontrade.community/">Сайт MoonTrade</a></div></section>
+<footer>Мод оновлюється автоматично. Нові можливості з'являються в тебе після оновлення сторінки.<br>Мод — інструмент для зручності, а не фінансова порада. Торгівля пов'язана з ризиком втрати коштів: починай на демо.</footer>
+</div>
+
+<script>
+
+(function(){
+  var R=document; if(!R) return;
+  function pick(group, attr, val){
+    group.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-selected', b.getAttribute(attr)===val ? 'true' : 'false'); });
+  }
+  R.querySelectorAll('.tabs button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var v=b.getAttribute('data-view'); pick(b.parentNode,'data-view',v);
+      document.getElementById('v-use').hidden = v!=='use';
+      document.getElementById('v-inst').hidden = v!=='inst';
+      try{ localStorage.setItem('mt-mod-view', v); }catch(e){}
+    });
+  });
+  R.querySelectorAll('.seg').forEach(function(seg){
+    seg.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        var s=b.getAttribute('data-sub'); pick(seg,'data-sub',s);
+        seg.parentNode.querySelectorAll(':scope > .sub').forEach(function(d){ d.style.display = d.getAttribute('data-sub')===s ? 'grid' : 'none'; });
+      });
+    });
+  });
+  R.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el=document.getElementById(''+btn.getAttribute('data-copy')), t=el.textContent;
+      function sel(){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+      try{ navigator.clipboard.writeText(t).then(function(){ btn.textContent='Скопійовано'; setTimeout(function(){ btn.textContent='Копіювати'; },1600); }, sel); }catch(e){ sel(); }
+    });
+  });
+  try{ var v=localStorage.getItem('mt-mod-view'); if(v==='use') document.getElementById('t-use').click(); }catch(e){}
+  var ua=navigator.userAgent||'', ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1), and=/Android/.test(ua);
+  function tap(sel){ var e=R.querySelector(sel); if(e) e.click(); }
+  if(ios){ tap('[data-sub="iios"]'); tap('[data-sub="ph"]'); } else if(and){ tap('[data-sub="iand"]'); tap('[data-sub="ph"]'); }
+
+  R.querySelectorAll('.vid').forEach(function(v){
+    var b=v.querySelector('button'); if(!b) return;
+    b.addEventListener('click', function(){
+      var f=document.createElement('iframe'), t=+v.getAttribute('data-t')||0;
+      f.src='https://www.youtube-nocookie.com/embed/'+v.getAttribute('data-yt')+'?autoplay=1&rel=0&modestbranding=1'+(t?'&start='+t:'');
+      f.title=b.getAttribute('aria-label'); f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true;
+      b.replaceWith(f);
+    });
+  });
+
+})();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "9b325ebbe6dd4bb7acda78a19dff78ff"}'></script>
+</body>
+</html>
