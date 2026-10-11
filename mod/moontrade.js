@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.4
+// @version      3.4.1
 // @description  MoonTrade Mod: телефон (iPhone / Android) і ПК — панель кнопок, стиль MoonTrade, чистий інтерфейс, звук і гарячі клавіші
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*
@@ -11,6 +11,36 @@
 
 (function () {
   'use strict';
+  // режим розробника лише для однієї вкладки (sessionStorage mt_dev): вантажимо тестову збірку замість релізу
+  if (!window.__MT_DEV__ && !window.__MT_LOADER__) {
+    var dv = null;
+    try { dv = sessionStorage.getItem('mt_dev'); } catch (e) {}
+    if (dv) {
+      window.__MT_DEV__ = true;
+      if (dv === 'fake') {   // тест без підключення до сервера моду (щоб не займати сесію користувача)
+        var RW = window.WebSocket;
+        var FW = function (url, pr) {
+          if (!/moontrade/i.test(url)) return pr === undefined ? new RW(url) : new RW(url, pr);
+          var ls = {}, me = { url: url, readyState: 0, CONNECTING: 0, OPEN: 1, CLOSING: 2, CLOSED: 3 };
+          window.__mtSent = [];
+          me.send = function (d) { window.__mtSent.push(d); };
+          me.close = function () { me.readyState = 3; };
+          me.addEventListener = function (t, f) { (ls[t] = ls[t] || []).push(f); };
+          me.removeEventListener = function () {};
+          me.emit = function (t, ev) { try { if (me['on' + t]) me['on' + t](ev); (ls[t] || []).forEach(function (f) { f(ev); }); } catch (e) { console.error(e); } };
+          me.push = function (o) { me.emit('message', { data: JSON.stringify(o) }); };
+          window.__mtFakeSock = me;
+          setTimeout(function () { me.readyState = 1; me.emit('open', {}); me.push({ type: 'online_count', count: 42 }); }, 300);
+          return me;
+        };
+        FW.prototype = RW.prototype; FW.CONNECTING = 0; FW.OPEN = 1; FW.CLOSING = 2; FW.CLOSED = 3;
+        window.WebSocket = FW;
+      }
+      fetch('https://learn.moontrade.community/mod/dev.js?v=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.text(); }).then(function (js) { new Function(js)(); });
+      return;
+    }
+  }
   if (window.__MT_LOADER__) return;
   window.__MT_LOADER__ = true;
 

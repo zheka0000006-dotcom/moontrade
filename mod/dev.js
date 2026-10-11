@@ -21,16 +21,17 @@
         var RW = window.WebSocket;
         var FW = function (url, pr) {
           if (!/moontrade/i.test(url)) return pr === undefined ? new RW(url) : new RW(url, pr);
-          var me = this, ls = {};
-          me.url = url; me.readyState = 0; window.__mtSent = [];
+          var ls = {}, me = { url: url, readyState: 0, CONNECTING: 0, OPEN: 1, CLOSING: 2, CLOSED: 3 };
+          window.__mtSent = [];
           me.send = function (d) { window.__mtSent.push(d); };
           me.close = function () { me.readyState = 3; };
           me.addEventListener = function (t, f) { (ls[t] = ls[t] || []).push(f); };
           me.removeEventListener = function () {};
-          me.emit = function (t, ev) { if (me['on' + t]) me['on' + t](ev); (ls[t] || []).forEach(function (f) { f(ev); }); };
+          me.emit = function (t, ev) { try { if (me['on' + t]) me['on' + t](ev); (ls[t] || []).forEach(function (f) { f(ev); }); } catch (e) { console.error(e); } };
           me.push = function (o) { me.emit('message', { data: JSON.stringify(o) }); };
           window.__mtFakeSock = me;
           setTimeout(function () { me.readyState = 1; me.emit('open', {}); me.push({ type: 'online_count', count: 42 }); }, 300);
+          return me;
         };
         FW.prototype = RW.prototype; FW.CONNECTING = 0; FW.OPEN = 1; FW.CLOSING = 2; FW.CLOSED = 3;
         window.WebSocket = FW;
