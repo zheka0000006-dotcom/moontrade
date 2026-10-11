@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.2
+// @version      3.3
 // @description  MoonTrade Mod: телефон (iPhone / Android) і ПК — панель кнопок, стиль MoonTrade, чистий інтерфейс, звук і гарячі клавіші
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*
@@ -15,16 +15,16 @@
   window.__MT_LOADER__ = true;
 
 
-  // ---------- мова: як в інтерфейсі Pocket Option (uk / ru, інакше — en) ----------
+  // ---------- мова: українська; російська — лише якщо в Pocket Option вибрано російську ----------
   var LANG = (function () {
     var m = location.pathname.match(/^\/([a-z]{2})(?:\/|$)/i);
     var l = ((m && m[1]) || document.documentElement.lang || '').slice(0, 2).toLowerCase();
-    return (l === 'uk' || l === 'ua') ? 'uk' : (l === 'ru' ? 'ru' : 'en');
+    return l === 'ru' ? 'ru' : 'uk';
   })();
   var I18N = { en: {"Сигнали": "Signals", "▾ показати": "▾ show", "Перетягніть": "Drag", "Перетягніть кнопку": "Drag the button", "Попередній актив": "Previous asset", "Наступний актив": "Next asset", "Таймфрейм і малювання": "Timeframe & drawing", "Надіслати угоду": "Share trade", "Налаштування моду": "Mod settings", "Згорнути панель": "Collapse panel", "— Горизонт.": "— Horizontal", "╱ Тренд": "╱ Trend", "▭ Прямокутник": "▭ Rectangle", "☰ Фібоначчі": "☰ Fibonacci", "↗ Промінь": "↗ Ray", "✎ Усі побудови": "✎ All drawings", "Таймфрейм": "Timeframe", "Усі ТФ": "All TF", "Малювання": "Drawing", "Стиль MoonTrade": "MoonTrade style", "Оформлення сторінки торгівлі та «Угод»": "Styling of the trading page and Trades", "Чистий інтерфейс": "Clean interface", "Сховати зайві кнопки PO": "Hide extra PO buttons", "Помножити суму": "Multiply amount", "Сьогодні": "Today", "угод": "trades", "плюс / мінус": "win / loss", "вінрейт": "win rate", "результат": "result", "Попередня група активів": "Previous asset group", "Наступна група активів": "Next asset group", "Горизонтальна лінія": "Horizontal line", "Вертикальна лінія": "Vertical line", "Промінь": "Ray", "Лінії Фібоначчі": "Fibonacci lines", "Віяло Фібоначчі": "Fibonacci fan", "Лінія тренда": "Trend line", "Паралельний канал": "Parallel channel", "Прямокутник": "Rectangle", "Вила Ендрюса": "Andrews' pitchfork", "Видалити останню побудову": "Delete last drawing", "Відкрити список таймфреймів": "Open timeframe list", "Відкрити список побудов": "Open drawings list", "Угода": "Trade", "Помножити суму на k": "Multiply amount by k", "Поділити суму на k": "Divide amount by k", "Мод": "Mod", "Надіслати сигнал": "Send signal", "Відкрити меню моду": "Open mod menu", "Звук": "Sound", "Звук сигналів увімк. / вимк.": "Signal sound on / off", "Звук BB увімк. / вимк.": "BB sound on / off", "Звук ST+CCI увімк. / вимк.": "ST+CCI sound on / off", "Звук сигналів трейдерів увімк. / вимк.": "Traders' signal sound on / off", "Інтерфейс": "Interface", "Сховати / показати картки сигналів": "Hide / show signal cards", "Сховати / показати кнопку «Надіслати»": "Hide / show the Send button", "Чистий інтерфейс увімк. / вимк.": "Clean interface on / off", "Стиль MoonTrade увімк. / вимк.": "MoonTrade style on / off", "Велика назва в хедері увімк. / вимк.": "Big header title on / off", "Пробіл": "Space", "Надіслати сигнал (поділитися угодою)": "Send signal (share trade)", "Надіслати": "Send", "Меню моду": "Mod menu", "Звук сигналів увімкнений": "Signal sound is on", "Звук сигналів вимкнений": "Signal sound is off", "онлайн": "online", "офлайн": "offline", "Мод підключений до сервера": "Mod is connected to the server", "трейдерів онлайн": "traders online", "Немає з’єднання з сервером моду": "No connection to the mod server", "Виплати": "Payouts", "Клавіші": "Hotkeys", "Кнопка «Надіслати»": "Send button", "Перетягується за ліву ручку": "Drag it by the left handle", "Повернути на місце": "Reset position", "Звук сигналів": "Signal sound", "Головний вимикач. Чути, навіть коли вкладка неактивна": "Master switch. Plays even when the tab is inactive", "Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3": "Bell: touch — 1 tone, line — 2, entry — 3", "М’якший тембр: відкат — 2 тони, вхід — 4": "Softer tone: pullback — 2 tones, entry — 4", "Сигнали від трейдерів": "Signals from traders", "«Дінь-дон»": "“Ding-dong”", "Гучність": "Volume", "Прослухати": "Listen", "Гарячі клавіші моду": "Mod hotkeys", "Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати. ↺ — повернути стандартну.": "Click the key on the right and press your own combination (Ctrl, Alt, Shift allowed). Esc — cancel. ↺ — restore default.", "Натисніть…": "Press…", "Повернути стандартну": "Restore default", "Стандартні клавіші": "Default keys", "Скинути до стандартних": "Reset to defaults", "Свої клавіші": "Custom keys", "Додайте клавішу для будь-якої дії: таймфрейми S5–D1, усі інструменти малювання, множник суми, звук, інтерфейс.": "Add a key for any action: timeframes S5–D1, all drawing tools, amount multiplier, sound, interface.", "Задати": "Set", "Видалити": "Delete", "+ Додати клавішу": "+ Add key", "— оберіть дію —": "— choose an action —"}, ru: {"Сигнали": "Сигналы", "▾ показати": "▾ показать", "Перетягніть": "Перетащите", "Перетягніть кнопку": "Перетащите кнопку", "Попередній актив": "Предыдущий актив", "Наступний актив": "Следующий актив", "Таймфрейм і малювання": "Таймфрейм и рисование", "Надіслати угоду": "Отправить сделку", "Налаштування моду": "Настройки мода", "Згорнути панель": "Свернуть панель", "— Горизонт.": "— Горизонт.", "╱ Тренд": "╱ Тренд", "▭ Прямокутник": "▭ Прямоугольник", "☰ Фібоначчі": "☰ Фибоначчи", "↗ Промінь": "↗ Луч", "✎ Усі побудови": "✎ Все построения", "Таймфрейм": "Таймфрейм", "Усі ТФ": "Все ТФ", "Малювання": "Рисование", "Стиль MoonTrade": "Стиль MoonTrade", "Оформлення сторінки торгівлі та «Угод»": "Оформление страницы торговли и «Сделок»", "Чистий інтерфейс": "Чистый интерфейс", "Сховати зайві кнопки PO": "Скрыть лишние кнопки PO", "Помножити суму": "Умножить сумму", "Сьогодні": "Сегодня", "угод": "сделок", "плюс / мінус": "плюс / минус", "вінрейт": "винрейт", "результат": "результат", "Попередня група активів": "Предыдущая группа активов", "Наступна група активів": "Следующая группа активов", "Горизонтальна лінія": "Горизонтальная линия", "Вертикальна лінія": "Вертикальная линия", "Промінь": "Луч", "Лінії Фібоначчі": "Линии Фибоначчи", "Віяло Фібоначчі": "Веер Фибоначчи", "Лінія тренда": "Линия тренда", "Паралельний канал": "Параллельный канал", "Прямокутник": "Прямоугольник", "Вила Ендрюса": "Вилы Эндрюса", "Видалити останню побудову": "Удалить последнее построение", "Відкрити список таймфреймів": "Открыть список таймфреймов", "Відкрити список побудов": "Открыть список построений", "Угода": "Сделка", "Помножити суму на k": "Умножить сумму на k", "Поділити суму на k": "Разделить сумму на k", "Мод": "Мод", "Надіслати сигнал": "Отправить сигнал", "Відкрити меню моду": "Открыть меню мода", "Звук": "Звук", "Звук сигналів увімк. / вимк.": "Звук сигналов вкл. / выкл.", "Звук BB увімк. / вимк.": "Звук BB вкл. / выкл.", "Звук ST+CCI увімк. / вимк.": "Звук ST+CCI вкл. / выкл.", "Звук сигналів трейдерів увімк. / вимк.": "Звук сигналов трейдеров вкл. / выкл.", "Інтерфейс": "Интерфейс", "Сховати / показати картки сигналів": "Скрыть / показать карточки сигналов", "Сховати / показати кнопку «Надіслати»": "Скрыть / показать кнопку «Отправить»", "Чистий інтерфейс увімк. / вимк.": "Чистый интерфейс вкл. / выкл.", "Стиль MoonTrade увімк. / вимк.": "Стиль MoonTrade вкл. / выкл.", "Велика назва в хедері увімк. / вимк.": "Большое название в шапке вкл. / выкл.", "Пробіл": "Пробел", "Надіслати сигнал (поділитися угодою)": "Отправить сигнал (поделиться сделкой)", "Надіслати": "Отправить", "Меню моду": "Меню мода", "Звук сигналів увімкнений": "Звук сигналов включён", "Звук сигналів вимкнений": "Звук сигналов выключен", "онлайн": "онлайн", "офлайн": "офлайн", "Мод підключений до сервера": "Мод подключён к серверу", "трейдерів онлайн": "трейдеров онлайн", "Немає з’єднання з сервером моду": "Нет соединения с сервером мода", "Виплати": "Выплаты", "Клавіші": "Клавиши", "Кнопка «Надіслати»": "Кнопка «Отправить»", "Перетягується за ліву ручку": "Перетаскивается за левую ручку", "Повернути на місце": "Вернуть на место", "Звук сигналів": "Звук сигналов", "Головний вимикач. Чути, навіть коли вкладка неактивна": "Главный выключатель. Слышно, даже когда вкладка неактивна", "Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3": "Колокольчик: касание — 1 тон, линия — 2, вход — 3", "М’якший тембр: відкат — 2 тони, вхід — 4": "Мягкий тембр: откат — 2 тона, вход — 4", "Сигнали від трейдерів": "Сигналы от трейдеров", "«Дінь-дон»": "«Динь-дон»", "Гучність": "Громкость", "Прослухати": "Прослушать", "Гарячі клавіші моду": "Горячие клавиши мода", "Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати. ↺ — повернути стандартну.": "Нажмите на клавишу справа и задайте свою комбинацию (можно с Ctrl, Alt, Shift). Esc — отмена. ↺ — вернуть стандартную.", "Натисніть…": "Нажмите…", "Повернути стандартну": "Вернуть стандартную", "Стандартні клавіші": "Стандартные клавиши", "Скинути до стандартних": "Сбросить к стандартным", "Свої клавіші": "Свои клавиши", "Додайте клавішу для будь-якої дії: таймфрейми S5–D1, усі інструменти малювання, множник суми, звук, інтерфейс.": "Добавьте клавишу для любого действия: таймфреймы S5–D1, все инструменты рисования, множитель суммы, звук, интерфейс.", "Задати": "Задать", "Видалити": "Удалить", "+ Додати клавішу": "+ Добавить клавишу", "— оберіть дію —": "— выберите действие —"} };
   function T(s) { var d = I18N[LANG]; return (d && d[s]) || s; }
-  // заголовки повзунків моду різні в кожній мові
-  var HANDLE_SEL = '[title^="Перетягніть"],[title^="Перетащите"],[title^="Drag"]';
+  // повзунки порогів у моді впізнаємо за курсором, а не за текстом — працює в будь-якій мові
+  var HANDLE_SEL = '[style*="col-resize"]';
 
   var UA = navigator.userAgent || '';
   var MOBILE = /iPhone|iPod|Android.+Mobile/i.test(UA) ||
@@ -139,9 +139,9 @@
     '.mt-m #po-modal .po-toggle-row{min-height:40px;}',
     '.mt-m #po-modal .po-toggle-row > span:first-child{padding-right:12px;font-size:14px;}',
     '.mt-m #po-modal input{font-size:16px!important;}', /* без автозуму Safari */
-    '#po-range-wrap [title^="Перетягніть"],#po-range-wrap [title^="Перетащите"],#po-range-wrap [title^="Drag"]{touch-action:none;}',
-    '#po-range-wrap [title^="Перетягніть"]::before,#po-range-wrap [title^="Перетащите"]::before,#po-range-wrap [title^="Drag"]::before{content:"";position:absolute;left:-14px;right:-14px;top:-12px;bottom:-12px;}',
-    '.mt-m #po-range-wrap [title^="Перетягніть"],.mt-m #po-range-wrap [title^="Перетащите"],.mt-m #po-range-wrap [title^="Drag"]{background:#fff!important;box-shadow:0 0 0 2px rgba(139,92,246,.7);}',
+    '#po-range-wrap [style*="col-resize"]{touch-action:none;}',
+    '#po-range-wrap [style*="col-resize"]::before{content:"";position:absolute;left:-14px;right:-14px;top:-12px;bottom:-12px;}',
+    '.mt-m #po-range-wrap [style*="col-resize"]{background:#fff!important;box-shadow:0 0 0 2px rgba(139,92,246,.7);}',
 
     /* верхні кнопки й велика плашка — на телефоні замінені панеллю збоку */
     '.mt-m #po-top-btns{display:none!important;}',
@@ -332,11 +332,12 @@
     '#mt-fixed button:hover{background:rgba(139,92,246,.26);}',
     '#mt-fixed button:active{transform:scale(.95);}',
     '#mt-fixed button.mt-off{opacity:.5;}',
-    '#mt-fixed .mt-st,#mt-bar .mt-st{display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:rgba(63,224,160,.08);',
+    '.mt-pc #mt-st{position:fixed;left:8px;bottom:4px;z-index:11;height:24px!important;padding:0 10px!important;font-size:12px!important;background:rgba(22,15,43,.92)!important;}',
+    '#mt-fixed .mt-st,#mt-st.mt-st,#mt-bar .mt-st{display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:rgba(63,224,160,.08);',
     'border:1px solid rgba(63,224,160,.22);font:700 13px/1 var(--mt-font);color:var(--mt-ink);white-space:nowrap;}',
-    '#mt-fixed .mt-dot,#mt-bar .mt-dot{width:9px;height:9px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 8px var(--mt-rose);}',
-    '#mt-fixed .mt-dot.on,#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 8px var(--mt-mint);}',
-    '#mt-fixed .mt-dot:not(.on) + span{color:var(--mt-rose);}',
+    '#mt-st .mt-dot,#mt-fixed .mt-dot,#mt-bar .mt-dot{width:9px;height:9px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 8px var(--mt-rose);}',
+    '#mt-st .mt-dot.on,#mt-fixed .mt-dot.on,#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 8px var(--mt-mint);}',
+    '#mt-st .mt-dot:not(.on) + span{color:var(--mt-rose);}',
     'html.mt-dragging,html.mt-dragging *{cursor:grabbing!important;}',
     'html.mt-nocards #po-scanner-list,html.mt-nocards #po-share-list,html.mt-nocards #po-alerts{display:none!important;}',
 
@@ -1071,6 +1072,19 @@
       return wait(250);
     }).then(function () { if (document.querySelector('.amount-list-modal')) amtToggle(); paintQuick(); });
   }
+  function openModMenu(anchor) {
+    var t = $('po-settings-btn');
+    if (!t) return;
+    setTimeout(function () {
+      t.click();
+      var md = $('po-modal');
+      if (!md || md.style.display === 'none') return;
+      var r = anchor && anchor.getBoundingClientRect();
+      if (r && r.width) { md.style.top = Math.round(r.bottom + 6) + 'px'; md.style.right = Math.max(8, Math.round(window.innerWidth - r.right)) + 'px'; }
+      else { md.style.top = '70px'; md.style.right = '120px'; }
+      md.style.left = 'auto';
+    }, 0);
+  }
   function toggleHtml(cls, key) { var on = !document.documentElement.classList.contains(cls); document.documentElement.classList.toggle(cls, on); lsSet(key, on); }
   if (PC) {
     if (lsGet('noCards', false)) document.documentElement.classList.add('mt-nocards');
@@ -1105,7 +1119,7 @@
   CAT.push({ id: 'amt:mul', g: T('Угода'), n: T('Помножити суму на k'), run: function () { amountOp(0); } });
   CAT.push({ id: 'amt:div', g: T('Угода'), n: T('Поділити суму на k'), run: function () { amountOp(1); } });
   CAT.push({ id: 'mod:send', g: T('Мод'), n: T('Надіслати сигнал'), run: function () { var t = $('po-send-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
-  CAT.push({ id: 'mod:menu', g: T('Мод'), n: T('Відкрити меню моду'), run: function () { var t = $('po-settings-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
+  CAT.push({ id: 'mod:menu', g: T('Мод'), n: T('Відкрити меню моду'), run: function () { openModMenu(document.querySelector('#mt-fixed [data-a="menu"]')); } });
   CAT.push({ id: 'snd:all', g: T('Звук'), n: T('Звук сигналів увімк. / вимк.'), run: function () { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } } });
   CAT.push({ id: 'snd:bb', g: T('Звук'), n: T('Звук BB увімк. / вимк.'), run: function () { setSnd('bb', !SND.bb); } });
   CAT.push({ id: 'snd:st', g: T('Звук'), n: T('Звук ST+CCI увімк. / вимк.'), run: function () { setSnd('st', !SND.st); } });
@@ -1196,8 +1210,9 @@
     var fx = el('div', { id: 'mt-fixed' });
     fx.innerHTML =
       '<button type="button" data-a="sound"></button>' +
-      '<button type="button" data-a="menu" title="' + T('Меню моду') + '">☰</button>' +
-      '<div class="mt-st" id="mt-st"><span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span></div>';
+      '<button type="button" data-a="menu" title="' + T('Меню моду') + '">☰</button>';
+    var on = el('div', { id: 'mt-st', 'class': 'mt-st' }, '<span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span>');
+    document.documentElement.appendChild(on);
     [bar, fx].forEach(function (box) {
       box.addEventListener('click', function (e) {
         var b = e.target.closest('button[data-a]');
@@ -1205,7 +1220,8 @@
         e.stopPropagation();
         var a = b.getAttribute('data-a');
         if (a === 'sound') { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } }
-        else runAct(a === 'send' ? 'mod:send' : 'mod:menu');
+        else if (a === 'menu') openModMenu(b);
+        else runAct('mod:send');
       });
     });
     document.documentElement.appendChild(fx);
