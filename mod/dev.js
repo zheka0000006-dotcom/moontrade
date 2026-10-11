@@ -332,11 +332,12 @@
     '#mt-fixed button:hover{background:rgba(139,92,246,.26);}',
     '#mt-fixed button:active{transform:scale(.95);}',
     '#mt-fixed button.mt-off{opacity:.5;}',
-    '#mt-fixed .mt-st,#mt-bar .mt-st{display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:rgba(63,224,160,.08);',
+    '.mt-pc #mt-st{position:fixed;left:10px;bottom:10px;z-index:11;height:28px!important;padding:0 10px!important;font-size:12px!important;background:rgba(22,15,43,.92)!important;}',
+    '#mt-fixed .mt-st,#mt-st.mt-st,#mt-bar .mt-st{display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:rgba(63,224,160,.08);',
     'border:1px solid rgba(63,224,160,.22);font:700 13px/1 var(--mt-font);color:var(--mt-ink);white-space:nowrap;}',
-    '#mt-fixed .mt-dot,#mt-bar .mt-dot{width:9px;height:9px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 8px var(--mt-rose);}',
-    '#mt-fixed .mt-dot.on,#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 8px var(--mt-mint);}',
-    '#mt-fixed .mt-dot:not(.on) + span{color:var(--mt-rose);}',
+    '#mt-st .mt-dot,#mt-fixed .mt-dot,#mt-bar .mt-dot{width:9px;height:9px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 8px var(--mt-rose);}',
+    '#mt-st .mt-dot.on,#mt-fixed .mt-dot.on,#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 8px var(--mt-mint);}',
+    '#mt-st .mt-dot:not(.on) + span{color:var(--mt-rose);}',
     'html.mt-dragging,html.mt-dragging *{cursor:grabbing!important;}',
     'html.mt-nocards #po-scanner-list,html.mt-nocards #po-share-list,html.mt-nocards #po-alerts{display:none!important;}',
 
@@ -1071,6 +1072,19 @@
       return wait(250);
     }).then(function () { if (document.querySelector('.amount-list-modal')) amtToggle(); paintQuick(); });
   }
+  function openModMenu(anchor) {
+    var t = $('po-settings-btn');
+    if (!t) return;
+    setTimeout(function () {
+      t.click();
+      var md = $('po-modal');
+      if (!md || md.style.display === 'none') return;
+      var r = anchor && anchor.getBoundingClientRect();
+      if (r && r.width) { md.style.top = Math.round(r.bottom + 6) + 'px'; md.style.right = Math.max(8, Math.round(window.innerWidth - r.right)) + 'px'; }
+      else { md.style.top = '70px'; md.style.right = '120px'; }
+      md.style.left = 'auto';
+    }, 0);
+  }
   function toggleHtml(cls, key) { var on = !document.documentElement.classList.contains(cls); document.documentElement.classList.toggle(cls, on); lsSet(key, on); }
   if (PC) {
     if (lsGet('noCards', false)) document.documentElement.classList.add('mt-nocards');
@@ -1105,7 +1119,7 @@
   CAT.push({ id: 'amt:mul', g: T('Угода'), n: T('Помножити суму на k'), run: function () { amountOp(0); } });
   CAT.push({ id: 'amt:div', g: T('Угода'), n: T('Поділити суму на k'), run: function () { amountOp(1); } });
   CAT.push({ id: 'mod:send', g: T('Мод'), n: T('Надіслати сигнал'), run: function () { var t = $('po-send-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
-  CAT.push({ id: 'mod:menu', g: T('Мод'), n: T('Відкрити меню моду'), run: function () { var t = $('po-settings-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
+  CAT.push({ id: 'mod:menu', g: T('Мод'), n: T('Відкрити меню моду'), run: function () { openModMenu(document.querySelector('#mt-fixed [data-a="menu"]')); } });
   CAT.push({ id: 'snd:all', g: T('Звук'), n: T('Звук сигналів увімк. / вимк.'), run: function () { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } } });
   CAT.push({ id: 'snd:bb', g: T('Звук'), n: T('Звук BB увімк. / вимк.'), run: function () { setSnd('bb', !SND.bb); } });
   CAT.push({ id: 'snd:st', g: T('Звук'), n: T('Звук ST+CCI увімк. / вимк.'), run: function () { setSnd('st', !SND.st); } });
@@ -1196,8 +1210,9 @@
     var fx = el('div', { id: 'mt-fixed' });
     fx.innerHTML =
       '<button type="button" data-a="sound"></button>' +
-      '<button type="button" data-a="menu" title="' + T('Меню моду') + '">☰</button>' +
-      '<div class="mt-st" id="mt-st"><span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span></div>';
+      '<button type="button" data-a="menu" title="' + T('Меню моду') + '">☰</button>';
+    var on = el('div', { id: 'mt-st', 'class': 'mt-st' }, '<span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span>');
+    document.documentElement.appendChild(on);
     [bar, fx].forEach(function (box) {
       box.addEventListener('click', function (e) {
         var b = e.target.closest('button[data-a]');
@@ -1205,7 +1220,8 @@
         e.stopPropagation();
         var a = b.getAttribute('data-a');
         if (a === 'sound') { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } }
-        else runAct(a === 'send' ? 'mod:send' : 'mod:menu');
+        else if (a === 'menu') openModMenu(b);
+        else runAct('mod:send');
       });
     });
     document.documentElement.appendChild(fx);
