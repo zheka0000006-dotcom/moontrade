@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.5
+// @version      3.6
 // @description  MoonTrade Mod: телефон (iPhone / Android) і ПК — панель кнопок, стиль MoonTrade, чистий інтерфейс, звук і гарячі клавіші
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*

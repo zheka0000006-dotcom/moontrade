@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.5
+// @version      3.6
 // @description  MoonTrade Mod: телефон (iPhone / Android) і ПК — панель кнопок, стиль MoonTrade, чистий інтерфейс, звук і гарячі клавіші
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*
@@ -143,6 +143,9 @@
     '#po-modal .po-toggle-row > span:first-child{color:var(--mt-ink)!important;font-weight:600;}',
     '#po-modal .po-toggle[data-on="true"]{background:var(--mt-grad)!important;}',
     '#po-modal .po-toggle[data-on="false"]{background:#2c2554!important;}',
+    '#po-modal .po-toggle{position:relative!important;}',
+    '#po-modal .po-toggle::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:left .2s;}',
+    '#po-modal .po-toggle[data-on="true"]::after{left:19px;}',
     '#po-modal input{background:var(--mt-night)!important;border:1px solid var(--mt-line)!important;border-radius:12px!important;color:var(--mt-ink)!important;}',
     '#po-modal input:focus{border-color:var(--mt-violet)!important;}',
     '#po-nickname-save{background:var(--mt-grad)!important;border-radius:999px!important;font-weight:700!important;}',
@@ -376,7 +379,7 @@
     'html.mt-nocards #po-scanner-list,html.mt-nocards #po-share-list,html.mt-nocards #po-alerts{display:none!important;}',
 
     /* меню моду: вкладки */
-    '.mt-pc #po-modal{max-height:calc(100vh - 80px)!important;overflow-y:auto!important;max-width:440px!important;}',
+    '.mt-pc #po-modal{max-height:calc(100vh - 80px)!important;overflow-y:auto!important;max-width:440px!important;z-index:100001!important;}',
     '#mt-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 4px;}',
     '#mt-tabs button{all:unset;cursor:pointer;padding:7px 12px;border-radius:999px;font:700 12px/1 var(--mt-font);color:var(--mt-muted);',
     'background:rgba(139,92,246,.08);border:1px solid var(--mt-line);}',
@@ -441,6 +444,11 @@
     /* чистий інтерфейс на ПК */
     '.mt-pclean .left-sidebar{display:none!important;}',
     'html.mt-pc > [data-mt-x]{display:none!important;}',
+    '.mt-pc #po-scanner-list{top:var(--mt-sig-top,170px)!important;left:var(--mt-sig-l,16px)!important;right:auto!important;}',
+    '.mt-pc #po-share-list{top:var(--mt-sig-top,170px)!important;right:var(--mt-sig-r,600px)!important;left:auto!important;align-items:flex-end;}',
+    '.mt-ptheme #po-scanner-list li,.mt-ptheme #po-share-list li{background:rgba(22,15,43,.96)!important;border-radius:14px!important;box-shadow:0 10px 30px rgba(0,0,0,.45)!important;font-family:var(--mt-font)!important;}',
+    '.mt-ptheme #po-scanner-list li *,.mt-ptheme #po-share-list li *{font-family:var(--mt-font)!important;}',
+    '.mt-ptheme #po-share-list li{border-color:var(--mt-line)!important;}',
     '.mt-pclean .right-sidebar [data-mt-x],html.mt-pclean > [data-mt-x]{display:none!important;}',
     '.mt-pclean .call-put-block .block__title .tooltip2{display:none!important;}',
     'html:not(.mt-pclean) .right-sidebar [data-mt-add]{display:none!important;}',
@@ -1745,6 +1753,23 @@
     }
     if (st.style.left !== x + 'px') st.style.left = x + 'px';
   }
+  // картки сигналів на ПК: під панеллю інструментів графіка, сигнали трейдерів — праворуч, щоб не накладались одна на одну і на «Надіслати»
+  function placeCardsPC() {
+    var pl = document.querySelector('canvas.layer.plot');
+    if (!pl) return;
+    var p = pl.getBoundingClientRect();
+    if (p.width < 50) return;
+    var tl = document.querySelector('.top-left-block'), top = p.top + 100;
+    if (tl) { var t = tl.getBoundingClientRect(); if (t.height > 0) top = t.bottom; }
+    var bar = $('mt-bar');
+    if (bar && bar.offsetParent !== null) {
+      var b = bar.getBoundingClientRect();
+      if (b.bottom < p.top + 220 && b.left < p.left + 340 && b.right > p.left) top = Math.max(top, b.bottom);
+    }
+    var v = { '--mt-sig-top': Math.round(top + 10) + 'px', '--mt-sig-l': Math.round(p.left + 16) + 'px', '--mt-sig-r': Math.round(innerWidth - p.right + 16) + 'px' };
+    var h = document.documentElement;
+    Object.keys(v).forEach(function (k) { if (h.style.getPropertyValue(k) !== v[k]) h.style.setProperty(k, v[k]); });
+  }
   function adoptPC() {
     if (!PC) return;
     setupPC();
@@ -1755,6 +1780,7 @@
     watchSignals();
     syncBar();
     placeSt();
+    placeCardsPC();
     if (!lsGet('barPos', null)) placeBarSaved();   // графік міг звузитись (відкрили чат тощо)
     var md = $('po-modal');
     if (md && getComputedStyle(md).display !== 'none') { syncSettings(); syncTabs(); }
