@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.4
+// @version      3.5
 // @description  MoonTrade Mod для Pocket Option. Завантажує актуальну версію моду, оновлюється сам.
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*
