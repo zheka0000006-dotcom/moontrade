@@ -143,6 +143,9 @@
     '#po-modal .po-toggle-row > span:first-child{color:var(--mt-ink)!important;font-weight:600;}',
     '#po-modal .po-toggle[data-on="true"]{background:var(--mt-grad)!important;}',
     '#po-modal .po-toggle[data-on="false"]{background:#2c2554!important;}',
+    '#po-modal .po-toggle{position:relative!important;}',
+    '#po-modal .po-toggle::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:left .2s;}',
+    '#po-modal .po-toggle[data-on="true"]::after{left:19px;}',
     '#po-modal input{background:var(--mt-night)!important;border:1px solid var(--mt-line)!important;border-radius:12px!important;color:var(--mt-ink)!important;}',
     '#po-modal input:focus{border-color:var(--mt-violet)!important;}',
     '#po-nickname-save{background:var(--mt-grad)!important;border-radius:999px!important;font-weight:700!important;}',
@@ -376,7 +379,7 @@
     'html.mt-nocards #po-scanner-list,html.mt-nocards #po-share-list,html.mt-nocards #po-alerts{display:none!important;}',
 
     /* меню моду: вкладки */
-    '.mt-pc #po-modal{max-height:calc(100vh - 80px)!important;overflow-y:auto!important;max-width:440px!important;}',
+    '.mt-pc #po-modal{max-height:calc(100vh - 80px)!important;overflow-y:auto!important;max-width:440px!important;z-index:100001!important;}',
     '#mt-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 4px;}',
     '#mt-tabs button{all:unset;cursor:pointer;padding:7px 12px;border-radius:999px;font:700 12px/1 var(--mt-font);color:var(--mt-muted);',
     'background:rgba(139,92,246,.08);border:1px solid var(--mt-line);}',
