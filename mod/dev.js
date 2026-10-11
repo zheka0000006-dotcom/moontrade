@@ -1891,10 +1891,14 @@
   }
 
   // ---------- запуск моду ----------
-  fetch('https://api.moontrade.it.com/script/main.js', { cache: 'no-store' })
-    .then(function (r) { return r.text(); })
-    .then(function (js) { new Function(js)(); })
-    .catch(function (e) { console.error('[PO] fetch failed', e); });
+  // Якщо надбудову підвантажив сам main.js мода (інтеграція програміста: window.__MT_SKIP_MAIN__ = true перед запуском),
+  // мод уже вантажиться — вдруге main.js не тягнемо. Інакше (наш рядок установки) — вантажимо мод як і раніше.
+  if (!window.__MT_SKIP_MAIN__) {
+    fetch('https://api.moontrade.it.com/script/main.js', { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (js) { new Function(js)(); })
+      .catch(function (e) { console.error('[PO] fetch failed', e); });
+  }
 
   var pend = false;
   // доступ до ботів вирішує сервер (адмінка): мод програміста ховає рядки «Стратегія …» тим, у кого доступу немає.
