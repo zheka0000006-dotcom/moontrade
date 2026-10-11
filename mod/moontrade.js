@@ -9,6 +9,13 @@
 // @noframes
 // ==/UserScript==
 
+// Маршрутизатор (12.10): поки програміст не підключив надбудову у свій main.js — працює надбудова 3.7, як і раніше.
+// Щойно в main.js з'являється підтримка надбудови (позначка __MT_SKIP_MAIN__) — вантажимо лише main.js,
+// і користувач отримує версію, яку виклав програміст. Перевстановлювати нічого не треба (ПК і телефон).
+(function () {
+  if (window.__MT_ROUTER__) return;
+  window.__MT_ROUTER__ = true;
+  function runOverlay() {
 (function () {
   'use strict';
   // режим розробника лише для однієї вкладки (sessionStorage mt_dev): вантажимо тестову збірку замість релізу
@@ -1854,4 +1861,13 @@
     }, true);
   });
   adoptAny();
+})();
+  }
+  fetch('https://api.moontrade.it.com/script/main.js', { cache: 'no-store' })
+    .then(function (r) { return r.text(); })
+    .then(function (m) {
+      if (m.indexOf('__MT_SKIP_MAIN__') !== -1) new Function(m)();
+      else runOverlay();
+    })
+    .catch(function () { runOverlay(); });
 })();
