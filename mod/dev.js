@@ -1799,8 +1799,8 @@
     });
     var left = right ? right + GAP : 330;
     var bar = $('mt-bar');
-    if (bar && bar.offsetParent !== null && !document.documentElement.classList.contains('mt-nobar')) {
-      var b = bar.getBoundingClientRect();
+    var b = bar && !document.documentElement.classList.contains('mt-nobar') ? bar.getBoundingClientRect() : null;
+    if (b && b.width > 0 && b.height > 0) {
       if (b.top < BOT_TOP + 70 && b.bottom > BOT_TOP - 10 && b.right + GAP > left && b.left < left + 400) left = b.right + GAP;
     }
     left = Math.min(left, innerWidth * 0.55);
@@ -1808,6 +1808,12 @@
     var wb = hb && !hb.classList.contains('mt-empty') ? hb.offsetWidth + 8 : 0;
     var wt = ht && !ht.classList.contains('mt-empty') ? ht.offsetWidth + 8 : 0;
     var trTop = Math.round(p.top + 8), trRight = Math.round(innerWidth - p.right + 8);
+    // вузький графік: картки трейдерів у тому ж рядку налізли б на картки бота — тоді ставимо їх під ними
+    var sl = $('po-scanner-list'), sh = $('po-share-list');
+    if (sl && sh && sl.children.length && !document.documentElement.classList.contains('mt-fold-bot')) {
+      var botR = left + wb + sl.offsetWidth, trL = innerWidth - trRight - wt - Math.max(sh.offsetWidth, 230);
+      if (trL < botR + 12) trTop = Math.max(trTop, Math.round(BOT_TOP + sl.offsetHeight + 12));
+    }
     var v = {
       '--mt-sig-top': BOT_TOP + 'px', '--mt-hdb-l': Math.round(left) + 'px', '--mt-sig-l': Math.round(left + wb) + 'px',
       '--mt-tr-top': trTop + 'px', '--mt-hdt-r': trRight + 'px', '--mt-sig-r': (trRight + wt) + 'px'
