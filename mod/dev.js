@@ -1142,12 +1142,23 @@
     openModMenu(document.querySelector('#mt-fixed [data-a="menu"]'));
     if (chosen && CUST[i] && !CUST[i].k) setTimeout(function () { capturing = 'c' + i; paintKeys(); }, 120);
   }
+  // під курсором беремо найвищий «справжній» елемент, пропускаючи прозорі шари на весь екран
+  function pickAt(x, y) {
+    var list = document.elementsFromPoint ? document.elementsFromPoint(x, y) : [];
+    for (var i = 0; i < list.length; i++) {
+      var n = list[i];
+      if (n === document.documentElement || n === document.body || inOurUi(n)) continue;
+      var r = n.getBoundingClientRect();
+      if (r.width > window.innerWidth * 0.6 && r.height > window.innerHeight * 0.6) continue;
+      return clickTarget(n);
+    }
+    return null;
+  }
   function inOurUi(n) { return !!(n.closest && n.closest('#mt-pick-hint,#mt-pick-box,#po-modal')); }
   if (PC) {
     window.addEventListener('mousemove', function (e) {
       if (!picking) return;
-      var t = clickTarget(e.target);
-      if (inOurUi(e.target)) t = null;
+      var t = inOurUi(e.target) ? null : pickAt(e.clientX, e.clientY);
       picking.cur = t;
       var b = picking.box;
       if (!t) { b.style.display = 'none'; return; }
@@ -1158,7 +1169,7 @@
       window.addEventListener(type, function (e) {
         if (!picking || inOurUi(e.target)) return;
         e.preventDefault(); e.stopImmediatePropagation();
-        if (type === 'click') stopPick(clickTarget(e.target));
+        if (type === 'click') stopPick(pickAt(e.clientX, e.clientY) || clickTarget(e.target));
       }, true);
     });
     window.addEventListener('keydown', function (e) {
