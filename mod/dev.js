@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.7
+// @version      3.8
 // @description  MoonTrade Mod: телефон (iPhone / Android) і ПК — панель кнопок, стиль MoonTrade, чистий інтерфейс, звук і гарячі клавіші
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*
@@ -445,7 +445,7 @@
     '.mt-pclean .left-sidebar{display:none!important;}',
     'html.mt-pc > [data-mt-x]{display:none!important;}',
     '.mt-pc #po-scanner-list{top:var(--mt-sig-top,170px)!important;left:var(--mt-sig-l,16px)!important;right:auto!important;}',
-    '.mt-pc #po-share-list{top:var(--mt-sig-top,170px)!important;right:var(--mt-sig-r,600px)!important;left:auto!important;align-items:flex-end;}',
+    '.mt-pc #po-share-list{top:var(--mt-tr-top,80px)!important;right:var(--mt-sig-r,400px)!important;left:auto!important;align-items:flex-end;}',
     '.mt-ptheme #po-scanner-list li,.mt-ptheme #po-share-list li{background:rgba(22,15,43,.96)!important;border-radius:14px!important;box-shadow:0 10px 30px rgba(0,0,0,.45)!important;font-family:var(--mt-font)!important;}',
     '.mt-ptheme #po-scanner-list li *,.mt-ptheme #po-share-list li *{font-family:var(--mt-font)!important;}',
     '.mt-ptheme #po-share-list li{border-color:var(--mt-line)!important;}',
@@ -454,10 +454,9 @@
     '.mt-pc .mt-sighd:hover{border-color:var(--mt-accent,#b46bff);}',
     '.mt-pc .mt-sighd b{color:#fff;background:var(--mt-grad);border-radius:999px;padding:1px 7px;font-size:11px;}',
     '.mt-pc .mt-sighd i{font-style:normal;color:var(--mt-muted);font-size:12px;}',
-    '#mt-hd-bot{left:var(--mt-sig-l,16px);}',
-    '#mt-hd-trd{right:var(--mt-sig-r,600px);}',
+    '#mt-hd-bot{left:var(--mt-hdb-l,330px);top:calc(var(--mt-sig-top,66px) + 6px);}',
+    '#mt-hd-trd{right:var(--mt-hdt-r,400px);top:calc(var(--mt-tr-top,80px) + 6px);}',
     '.mt-sighd.mt-empty,html.mt-nocards .mt-sighd,html:not(.mt-pc) .mt-sighd{display:none!important;}',
-    'html.mt-pc.mt-hasbot #po-scanner-list,html.mt-pc.mt-hastrd #po-share-list{top:calc(var(--mt-sig-top,170px) + 36px)!important;}',
     'html.mt-fold-bot #po-scanner-list,html.mt-fold-trd #po-share-list{display:none!important;}',
     '.mt-pclean .right-sidebar [data-mt-x],html.mt-pclean > [data-mt-x]{display:none!important;}',
     '.mt-pclean .call-put-block .block__title .tooltip2{display:none!important;}',
@@ -873,7 +872,25 @@
     if (v > 0) { lsSet('poK', v); return v; }
     return lsGet('poK', 2);
   }
+  // ПК: сума — звичайне поле вводу, тому множимо одразу, без відкриття калькулятора PO
+  function setAmountDirect(f) {
+    if (!PC) return false;
+    var inp = document.querySelector('.block--bet-amount .value__val input');
+    if (!inp) return false;
+    var n = parseFloat(String(inp.value).replace(/[^\d.]/g, ''));
+    if (!(n > 0) || !(f > 0)) return false;
+    var v = Math.round(n * f * 100) / 100;
+    if (!(v > 0)) return false;
+    var setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+    inp.focus();
+    setter.call(inp, String(v));
+    inp.dispatchEvent(new Event('input', { bubbles: true }));
+    inp.dispatchEvent(new Event('change', { bubbles: true }));
+    inp.blur();
+    return true;
+  }
   function multiplyAmount() {
+    if (setAmountDirect(lsGet('poK', 2))) { paintQuick(); return; }
     if (document.querySelector('.amount-list-modal')) amtToggle();
     wait(150).then(function () { amtToggle(); return wait(400); }).then(function () {
       readPoK();
@@ -1193,6 +1210,8 @@
     }, function (l) { l.click(); setTimeout(closeDropDown, 80); });
   }
   function amountOp(i) {   // 0 — помножити на k, 1 — поділити на k (кнопки калькулятора PO)
+    var k = lsGet('poK', 2);
+    if (setAmountDirect(i ? 1 / k : k)) { paintQuick(); return; }
     if (document.querySelector('.amount-list-modal')) amtToggle();
     wait(150).then(function () { amtToggle(); return wait(400); }).then(function () {
       readPoK();
@@ -1765,23 +1784,38 @@
     }
     if (st.style.left !== x + 'px') st.style.left = x + 'px';
   }
-  // картки сигналів на ПК: під панеллю інструментів графіка, сигнали трейдерів — праворуч, щоб не накладались одна на одну і на «Надіслати»
+  // картки сигналів на ПК — там, де їх ставить сам мод: сигнали бота в рядку інструментів графіка
+  // (одразу за кнопкою «Надіслати», якщо вона в цьому рядку), сигнали трейдерів — у правому верхньому куті графіка.
+  // Заголовок «Сигнали … N» стоїть у тому ж рядку ліворуч від карток, тому картки не опускаються нижче.
   function placeCardsPC() {
     var pl = document.querySelector('canvas.layer.plot');
     if (!pl) return;
     var p = pl.getBoundingClientRect();
     if (p.width < 50) return;
-    var tl = document.querySelector('.top-left-block'), top = p.top + 100;
-    if (tl) { var t = tl.getBoundingClientRect(); if (t.height > 0) top = t.bottom; }
+    var BOT_TOP = 66, GAP = 20;
+    var right = 0;
+    document.querySelectorAll('.top-left-block__block1 .items > *').forEach(function (e) {
+      var r = e.getBoundingClientRect(); if (r.width > 0 && r.right > right) right = r.right;
+    });
+    var left = right ? right + GAP : 330;
     var bar = $('mt-bar');
-    if (bar && bar.offsetParent !== null) {
+    if (bar && bar.offsetParent !== null && !document.documentElement.classList.contains('mt-nobar')) {
       var b = bar.getBoundingClientRect();
-      if (b.bottom < p.top + 220 && b.left < p.left + 340 && b.right > p.left) top = Math.max(top, b.bottom);
+      if (b.top < BOT_TOP + 70 && b.bottom > BOT_TOP - 10 && b.right + GAP > left && b.left < left + 400) left = b.right + GAP;
     }
-    var v = { '--mt-sig-top': Math.round(top + 10) + 'px', '--mt-sig-l': Math.round(p.left + 16) + 'px', '--mt-sig-r': Math.round(innerWidth - p.right + 16) + 'px' };
+    left = Math.min(left, innerWidth * 0.55);
+    var hb = $('mt-hd-bot'), ht = $('mt-hd-trd');
+    var wb = hb && !hb.classList.contains('mt-empty') ? hb.offsetWidth + 8 : 0;
+    var wt = ht && !ht.classList.contains('mt-empty') ? ht.offsetWidth + 8 : 0;
+    var trTop = Math.round(p.top + 8), trRight = Math.round(innerWidth - p.right + 8);
+    var v = {
+      '--mt-sig-top': BOT_TOP + 'px', '--mt-hdb-l': Math.round(left) + 'px', '--mt-sig-l': Math.round(left + wb) + 'px',
+      '--mt-tr-top': trTop + 'px', '--mt-hdt-r': trRight + 'px', '--mt-sig-r': (trRight + wt) + 'px'
+    };
     var h = document.documentElement;
     Object.keys(v).forEach(function (k) { if (h.style.getPropertyValue(k) !== v[k]) h.style.setProperty(k, v[k]); });
   }
+  if (PC) window.addEventListener('resize', function () { placeCardsPC(); });
   // згортання / розгортання сигналів на ПК (окремо бот і трейдери)
   var FOLD = [['bot', 'po-scanner-list', 'foldBot', 'Сигнали бота'], ['trd', 'po-share-list', 'foldTrd', 'Сигнали трейдерів']];
   function toggleFoldPC(k) {
@@ -1811,6 +1845,7 @@
       hd.classList.toggle('mt-empty', n === 0);
       h.classList.toggle('mt-has' + f[0], n > 0);
     });
+    placeCardsPC();
   }
   function adoptPC() {
     if (!PC) return;
