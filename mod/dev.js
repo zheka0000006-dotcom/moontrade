@@ -1089,7 +1089,8 @@
 
   // ---------- свої клавіші: вибір будь-якого елемента інтерфейсу кліком ----------
   function norm(t) { return String(t || '').replace(/\s+/g, ' ').trim().slice(0, 40); }
-  var PICK_SKIP = /^(active|hover|open|opened|show|shown|selected|focus|focused|disabled|ps|ps--.*|mt-.*|is-.*|.*--active|.*--open|.*--selected|tooltip2)$/;
+  // класи-стани (відкрито, активно, вибрано…) змінюються, тому в селектор їх не беремо
+  var PICK_SKIP = /(active|open|show|selected|hover|focus|current|checked|disabled|expanded|visible|hidden|^ps$|^ps--|^mt-|^is-|tooltip2|appear|enter|exit|done|undefined)/i;
   // власний escape: PO підміняє window.CSS, тому CSS.escape там немає
   function cssEsc(v) { return String(v).replace(/([^a-zA-Z0-9_\u00A0-\uFFFF-])/g, '\\$1').replace(/^(-?\d)/, '\\3$1 '); }
   function cssPath(node) {
@@ -1135,7 +1136,8 @@
     document.documentElement.classList.remove('mt-picking');
     if (chosen) {
       var sel = cssPath(chosen), all = [].slice.call(document.querySelectorAll(sel)), txt = norm(chosen.innerText);
-      CUST[i] = { a: 'pick', sel: sel, txt: txt, idx: Math.max(0, all.indexOf(chosen)), label: pickLabel(chosen), trade: isTrade(chosen), k: CUST[i] ? CUST[i].k : null };
+      var loose = chosen.tagName.toLowerCase() + [].slice.call(chosen.classList).filter(function (c) { return !PICK_SKIP.test(c); }).slice(0, 2).map(function (c) { return '.' + cssEsc(c); }).join('');
+      CUST[i] = { a: 'pick', sel: sel, loose: loose, txt: txt, idx: Math.max(0, all.indexOf(chosen)), label: pickLabel(chosen), trade: isTrade(chosen), k: CUST[i] ? CUST[i].k : null };
       lsSet('ckeys', CUST);
     }
     lsSet('tab', 'keys');
@@ -1181,7 +1183,11 @@
     try { all = [].slice.call(document.querySelectorAll(c.sel)); } catch (e) { return null; }
     var vis = function (n) { var r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
     var byTxt = c.txt ? all.filter(function (n) { return norm(n.innerText) === c.txt; }) : [];
-    return byTxt.filter(vis)[0] || (all[c.idx] && vis(all[c.idx]) ? all[c.idx] : null) || all.filter(vis)[0] || null;
+    var hit = byTxt.filter(vis)[0] || (all[c.idx] && vis(all[c.idx]) ? all[c.idx] : null) || all.filter(vis)[0] || null;
+    if (!hit && c.loose && c.txt) {   // запасний пошук: той самий тип елемента з тим самим текстом
+      try { hit = [].slice.call(document.querySelectorAll(c.loose)).filter(function (n) { return vis(n) && norm(n.innerText) === c.txt; })[0] || null; } catch (e) {}
+    }
+    return hit;
   }
   function realClick(n) {
     var r = n.getBoundingClientRect(), o = { bubbles: true, cancelable: true, view: window, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, button: 0 };
