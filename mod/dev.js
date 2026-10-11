@@ -129,6 +129,8 @@
     /* компактно: актив і дохідність в один рядок */
     '#po-hud{display:flex!important;align-items:center!important;gap:10px!important;padding:6px 14px!important;min-width:0!important;border-radius:12px!important;line-height:1.2!important;}',
     '#po-hud > div{margin:0!important;}',
+    /* вимкнений у налаштуваннях моду HUD має лишатися прихованим */
+    '#po-hud[style*="display: none"],#po-hud[style*="display:none"]{display:none!important;}',
     '#po-hud > div:first-child{font:600 13px/1.2 var(--mt-font)!important;color:var(--mt-ink)!important;}',
     '#po-hud > div:last-child{font:800 18px/1.2 var(--mt-font)!important;letter-spacing:0!important;}',
 
@@ -1088,13 +1090,15 @@
   // ---------- свої клавіші: вибір будь-якого елемента інтерфейсу кліком ----------
   function norm(t) { return String(t || '').replace(/\s+/g, ' ').trim().slice(0, 40); }
   var PICK_SKIP = /^(active|hover|open|opened|show|shown|selected|focus|focused|disabled|ps|ps--.*|mt-.*|is-.*|.*--active|.*--open|.*--selected|tooltip2)$/;
+  // власний escape: PO підміняє window.CSS, тому CSS.escape там немає
+  function cssEsc(v) { return String(v).replace(/([^a-zA-Z0-9_\u00A0-\uFFFF-])/g, '\\$1').replace(/^(-?\d)/, '\\3$1 '); }
   function cssPath(node) {
     var parts = [];
     for (var e = node; e && e.nodeType === 1 && e !== document.documentElement && e !== document.body && parts.length < 6; e = e.parentElement) {
-      if (e.id && !/\d{3,}/.test(e.id) && !/^mt-/.test(e.id)) { parts.unshift('#' + CSS.escape(e.id)); break; }
+      if (e.id && !/\d{3,}/.test(e.id) && !/^mt-/.test(e.id)) { parts.unshift('#' + cssEsc(e.id)); break; }
       var sel = e.tagName.toLowerCase();
       var cls = [].slice.call(e.classList).filter(function (c) { return !PICK_SKIP.test(c) && !/\d{4,}/.test(c); }).slice(0, 3);
-      if (cls.length) sel += '.' + cls.map(function (c) { return CSS.escape(c); }).join('.');
+      if (cls.length) sel += '.' + cls.map(function (c) { return cssEsc(c); }).join('.');
       ['data-type', 'data-modal-id', 'data-menu-id', 'data-id', 'data-value', 'data-tab'].forEach(function (a) {
         if (e.hasAttribute(a)) sel += '[' + a + '="' + e.getAttribute(a).replace(/"/g, '\\"') + '"]';
       });
