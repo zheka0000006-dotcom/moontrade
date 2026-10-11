@@ -1208,6 +1208,7 @@
         else runAct(a === 'send' ? 'mod:send' : 'mod:menu');
       });
     });
+    document.documentElement.appendChild(fx);
     placeFixed();
     var grip = bar.querySelector('.mt-grip'), dx = 0, dy = 0, drag = false;
     grip.addEventListener('mousedown', function (e) {
@@ -1250,7 +1251,8 @@
     var fx = $('mt-fixed');
     if (!fx) return;
     var host = $('po-top-btns');
-    if (host) { if (fx.parentNode !== host) host.appendChild(fx); }
+    // після вставки мод має заново відсунути велику назву, щоб вона не налізла на кнопки
+    if (host) { if (fx.parentNode !== host) { host.appendChild(fx); setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 50); } }
     else if (fx.parentNode !== document.documentElement) document.documentElement.appendChild(fx);
     fx.classList.toggle('mt-float', !host);
   }
