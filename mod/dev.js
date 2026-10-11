@@ -237,7 +237,7 @@
 
     /* ===== Чистий інтерфейс (html.mt-clean) ===== */
     '.mt-clean [data-mt-x],.mt-clean .mobile-bottom-nav__center,.mt-clean .info-icons,.mt-clean .mobile-bottom-nav__cell--more{display:none!important;}',
-    'html:not(.mt-clean) [data-mt-add]{display:none!important;}',
+    'html.mt-m:not(.mt-clean) [data-mt-add]{display:none!important;}',
     /* компактне нижнє меню в один рядок: більше місця для графіка */
     'html.mt-clean .is-chart.portrait .mobile-bottom-nav,html.mt-clean body:not(.is-chart) .mobile-bottom-nav{height:calc(44px + max(8px,env(safe-area-inset-bottom,0px)))!important;}',
     'html.mt-clean .mobile-bottom-nav__list{height:100%!important;min-height:0!important;padding:2px 10px max(8px,env(safe-area-inset-bottom,0px))!important;box-sizing:border-box!important;}',
@@ -1213,7 +1213,7 @@
     if (!bar || !tb || !plot) return { x: 100, y: 70 };
     var c = plot.getBoundingClientRect(), r = tb.getBoundingClientRect();
     var w = bar.offsetWidth, h = bar.offsetHeight;
-    if (r.right + 12 + w <= c.right - 70) return { x: r.right + 12, y: r.top + (r.height - h) / 2 };
+    if (r.right + 12 + w <= c.right - 8) return { x: r.right + 12, y: r.top + (r.height - h) / 2 };
     return { x: r.left, y: r.bottom + 44 };
   }
   function placeBarSaved() {
