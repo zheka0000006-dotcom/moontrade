@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.0
+// @version      3.1
 // @description  MoonTrade Mod: телефон (iPhone / Android) і ПК — панель кнопок, стиль MoonTrade, чистий інтерфейс, звук і гарячі клавіші
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*
@@ -237,7 +237,7 @@
 
     /* ===== Чистий інтерфейс (html.mt-clean) ===== */
     '.mt-clean [data-mt-x],.mt-clean .mobile-bottom-nav__center,.mt-clean .info-icons,.mt-clean .mobile-bottom-nav__cell--more{display:none!important;}',
-    'html:not(.mt-clean) [data-mt-add]{display:none!important;}',
+    'html.mt-m:not(.mt-clean) [data-mt-add]{display:none!important;}',
     /* компактне нижнє меню в один рядок: більше місця для графіка */
     'html.mt-clean .is-chart.portrait .mobile-bottom-nav,html.mt-clean body:not(.is-chart) .mobile-bottom-nav{height:calc(44px + max(8px,env(safe-area-inset-bottom,0px)))!important;}',
     'html.mt-clean .mobile-bottom-nav__list{height:100%!important;min-height:0!important;padding:2px 10px max(8px,env(safe-area-inset-bottom,0px))!important;box-sizing:border-box!important;}',
@@ -294,30 +294,35 @@
     '#mt-set input{width:72px;text-align:center;}',
 
     /* ================= ПК ================= */
+    /* іконки PO (FontAwesome) не мають втрачати свій шрифт через стиль MoonTrade */
+    'html.mt-ptheme .fa,html.mt-theme .fa{font-family:FontAwesome!important;}',
     /* кнопки моду «Надіслати / МОД» і бейдж онлайну — тепер у панелі MoonTrade */
     '.mt-pc #po-online-badge{display:none!important;}',
     '.mt-pc #po-top-btns{visibility:hidden!important;pointer-events:none!important;}',
     '.mt-pc #mt-kchip{height:24px;padding:0 7px;margin-right:2px;font-size:11px;line-height:24px;}',
-    '#mt-bar{position:fixed;left:-9999px;top:70px;z-index:11;display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:4px 6px;border-radius:14px;',
+    '#mt-bar{position:fixed;left:-9999px;top:70px;z-index:11;display:flex;align-items:center;gap:6px;padding:5px 8px 5px 6px;border-radius:16px;',
     'background:rgba(22,15,43,.94);border:1px solid var(--mt-line);box-shadow:0 10px 30px rgba(0,0,0,.45);',
     '-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-family:var(--mt-font);-webkit-user-select:none;user-select:none;}',
-    '#mt-bar .mt-grip{width:10px;height:26px;margin:0 2px;cursor:grab;border-radius:4px;opacity:.75;',
+    'html.mt-nobar #mt-bar{display:none!important;}',
+    '#mt-bar .mt-grip{width:10px;height:30px;cursor:grab;border-radius:4px;opacity:.75;',
     'background:radial-gradient(circle,var(--mt-muted) 1.2px,transparent 1.6px) 0 0/5px 5px;}',
-    '#mt-bar button{all:unset;box-sizing:border-box;height:30px;min-width:30px;padding:0 8px;border-radius:9px;display:flex;align-items:center;justify-content:center;',
-    'color:var(--mt-ink);font:700 12px/1 var(--mt-font);background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.18);cursor:pointer;white-space:nowrap;transition:background .15s;}',
+    '#mt-bar button{all:unset;box-sizing:border-box;height:38px;min-width:38px;padding:0 10px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:6px;',
+    'color:var(--mt-ink);font:700 16px/1 var(--mt-font);background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.2);cursor:pointer;white-space:nowrap;transition:background .15s,transform .1s;}',
     '#mt-bar button:hover{background:rgba(139,92,246,.26);}',
-    '#mt-bar button:active{transform:scale(.94);}',
-    '#mt-bar button.mt-on,#mt-bar button.mt-primary{background:var(--mt-grad);color:#fff;border-color:transparent;}',
+    '#mt-bar button:active{transform:scale(.95);}',
+    '#mt-bar button.mt-send{background:var(--mt-grad);border-color:transparent;color:#fff;font-size:14px;padding:0 16px;box-shadow:0 6px 16px rgba(109,61,240,.35);}',
+    '#mt-bar button.mt-send:hover{filter:brightness(1.12);}',
     '#mt-bar button.mt-off{opacity:.5;}',
-    '#mt-bar .mt-sep{width:1px;height:22px;background:var(--mt-line);margin:0 3px;}',
-    '#mt-bar .mt-grp{display:flex;align-items:center;gap:4px;}',
-    '#mt-bar .mt-st{display:flex;align-items:center;gap:6px;font:700 11px/1 var(--mt-font);color:var(--mt-muted);padding:0 4px 0 2px;white-space:nowrap;}',
-    '#mt-bar .mt-dot{width:8px;height:8px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 6px var(--mt-rose);}',
-    '#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 6px var(--mt-mint);}',
+    '#mt-bar .mt-st{display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:rgba(63,224,160,.08);',
+    'border:1px solid rgba(63,224,160,.22);font:700 13px/1 var(--mt-font);color:var(--mt-ink);white-space:nowrap;}',
+    '#mt-bar .mt-dot{width:9px;height:9px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 8px var(--mt-rose);}',
+    '#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 8px var(--mt-mint);}',
+    '#mt-bar .mt-dot:not(.on) + span{color:var(--mt-rose);}',
     'html.mt-dragging,html.mt-dragging *{cursor:grabbing!important;}',
+    'html.mt-nocards #po-scanner-list,html.mt-nocards #po-share-list,html.mt-nocards #po-alerts{display:none!important;}',
 
     /* меню моду: вкладки */
-    '.mt-pc #po-modal{max-height:calc(100vh - 80px)!important;overflow-y:auto!important;max-width:430px!important;}',
+    '.mt-pc #po-modal{max-height:calc(100vh - 80px)!important;overflow-y:auto!important;max-width:440px!important;}',
     '#mt-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 4px;}',
     '#mt-tabs button{all:unset;cursor:pointer;padding:7px 12px;border-radius:999px;font:700 12px/1 var(--mt-font);color:var(--mt-muted);',
     'background:rgba(139,92,246,.08);border:1px solid var(--mt-line);}',
@@ -329,12 +334,19 @@
     '.mt-pc #mt-set{border-bottom:0;}',
     '.mt-pane{padding:12px 16px 8px;display:flex;flex-direction:column;gap:10px;font-family:var(--mt-font);color:var(--mt-ink);}',
     '.mt-pane .mt-h,#mt-set .mt-h{color:var(--mt-violet);font:700 11px/1 var(--mt-font);letter-spacing:.6px;text-transform:uppercase;}',
+    '.mt-pane .mt-h2{margin-top:10px;padding-top:14px;border-top:1px solid var(--mt-line);}',
     '.mt-pane label{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:34px;cursor:pointer;font:600 14px/1.25 var(--mt-font);}',
     '.mt-pane label small,.mt-btnrow small{display:block;color:var(--mt-muted);font:500 11px/1.3 var(--mt-font);margin-top:2px;}',
     '.mt-pane .mt-sw{flex-shrink:0;width:40px;height:22px;border-radius:11px;background:#2c2554;position:relative;transition:.2s;}',
     '.mt-pane .mt-sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s;}',
     '.mt-pane .mt-sw.on{background:var(--mt-grad);}',
     '.mt-pane .mt-sw.on::after{left:21px;}',
+    '.mt-snd-row{display:flex;align-items:center;gap:10px;}',
+    '.mt-snd-row label{flex:1;}',
+    '.mt-snd-row button{all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;',
+    'font-size:11px;color:var(--mt-moon);background:rgba(139,92,246,.12);border:1px solid var(--mt-line);}',
+    '.mt-snd-row button:hover{background:rgba(139,92,246,.28);}',
+    '#mt-snd.mt-muted .mt-snd-row,#mt-snd.mt-muted .mt-vol{opacity:.45;}',
     '.mt-vol{display:flex;align-items:center;gap:12px;font:600 14px/1 var(--mt-font);}',
     '.mt-vol input{flex:1;accent-color:#8b5cf6;}',
     '.mt-vol b{min-width:40px;text-align:right;color:var(--mt-moon);font-size:13px;}',
@@ -342,34 +354,47 @@
     '.mt-btnrow button{all:unset;cursor:pointer;padding:7px 12px;border-radius:999px;font:700 12px/1 var(--mt-font);color:var(--mt-moon);',
     'background:rgba(139,92,246,.10);border:1px solid var(--mt-line);white-space:nowrap;}',
     '.mt-btnrow button:hover{background:rgba(139,92,246,.24);}',
+    '.mt-btnrow button.mt-add{background:var(--mt-grad);color:#fff;border-color:transparent;}',
     '.mt-note{color:var(--mt-muted);font:500 12px/1.4 var(--mt-font);}',
     '.mt-k{display:flex;align-items:center;gap:8px;font:600 13px/1.2 var(--mt-font);min-height:30px;}',
     '.mt-k > span{flex:1;}',
     '.mt-k.mt-ch > span{color:var(--mt-moon);}',
+    '.mt-k select{flex:1;min-width:0;height:30px;padding:0 8px;border-radius:8px;background:var(--mt-night);color:var(--mt-ink);',
+    'border:1px solid var(--mt-line);font:600 12px/1 var(--mt-font);cursor:pointer;outline:none;}',
+    '.mt-k select:focus{border-color:var(--mt-violet);}',
+    '.mt-k select option,.mt-k select optgroup{background:#160f2b;color:var(--mt-ink);}',
     '.mt-kb{all:unset;cursor:pointer;min-width:74px;text-align:center;padding:6px 10px;border-radius:8px;font:700 12px/1 var(--mt-font);',
     'color:var(--mt-ink);background:var(--mt-night);border:1px solid var(--mt-line);box-shadow:inset 0 -2px 0 rgba(139,92,246,.25);}',
     '.mt-kb:hover{border-color:var(--mt-violet);}',
+    '.mt-kb.mt-empty{color:var(--mt-muted);border-style:dashed;}',
     '.mt-kb.mt-wait{background:var(--mt-grad);color:#fff;border-color:transparent;}',
     '.mt-kr{all:unset;cursor:pointer;width:24px;text-align:center;color:var(--mt-muted);font-size:14px;}',
+    '.mt-kr:hover{color:var(--mt-ink);}',
     '.mt-kr[disabled]{opacity:.25;cursor:default;}',
 
     /* чистий інтерфейс на ПК */
     '.mt-pclean .left-sidebar{display:none!important;}',
-    '.mt-pclean .right-sidebar [data-mt-x]{display:none!important;}',
+    '.mt-pclean .right-sidebar [data-mt-x],html.mt-pclean > [data-mt-x]{display:none!important;}',
+    '.mt-pclean .call-put-block .block__title .tooltip2{display:none!important;}',
     'html:not(.mt-pclean) .right-sidebar [data-mt-add]{display:none!important;}',
     '.right-sidebar [data-mt-add] a{position:relative;cursor:pointer;}',
     '.right-sidebar .mt-badge{position:absolute;top:6px;right:18px;min-width:16px;height:16px;padding:0 4px;box-sizing:border-box;border-radius:8px;',
-    'background:#2f7ef5;color:#fff;font:700 10px/16px var(--mt-font);font-style:normal;text-align:center;}',
+    'background:var(--mt-violet);color:#fff;font:700 10px/16px var(--mt-font);font-style:normal;text-align:center;}',
+    /* список активів PO не виходить за межі свого вікна */
+    '.mt-pc .assets-block__col-body{display:flex!important;flex-direction:column!important;}',
+    '.mt-pc .assets-block__body-wrap{flex:1 1 0!important;min-height:0!important;}',
+    '.mt-pc .assets-block__body{height:100%!important;}',
+    '.mt-pc .assets-block__body > .scrollbar-container{max-height:100%!important;}',
 
     /* стиль MoonTrade на ПК */
     '.mt-ptheme body,.mt-ptheme .wrapper{background:var(--mt-night)!important;}',
     '.mt-ptheme .site-header{background:#120c27!important;border-bottom:1px solid var(--mt-line)!important;box-shadow:none!important;}',
-    '.mt-ptheme .site-header *{font-family:var(--mt-font)!important;}',
+    '.mt-ptheme .site-header *:not(.fa){font-family:var(--mt-font)!important;}',
     '.mt-ptheme .left-sidebar,.mt-ptheme .right-sidebar{background:#120c27!important;border-color:var(--mt-line)!important;}',
     '.mt-ptheme .right-sidebar .nlabel,.mt-ptheme .left-sidebar a{font-family:var(--mt-font)!important;font-weight:600!important;}',
     '.mt-ptheme .right-sidebar li.active > a,.mt-ptheme .right-sidebar li > a:hover{color:var(--mt-moon)!important;}',
     '.mt-ptheme .call-put-block{background:linear-gradient(180deg,#1a1440,#120c27)!important;border-left:1px solid var(--mt-line)!important;}',
-    '.mt-ptheme .call-put-block *{font-family:var(--mt-font)!important;}',
+    '.mt-ptheme .call-put-block *:not(.fa){font-family:var(--mt-font)!important;}',
     '.mt-ptheme .call-put-block .block__title{color:var(--mt-muted)!important;font-weight:600!important;}',
     '.mt-ptheme .call-put-block .block__control{background:var(--mt-night)!important;border:1px solid var(--mt-line)!important;border-radius:12px!important;}',
     '.mt-ptheme .call-put-block .value__val{color:var(--mt-ink)!important;font-weight:700!important;}',
@@ -377,19 +402,50 @@
     '.mt-ptheme .block--payout .value__val-start{color:var(--mt-mint)!important;font-weight:800!important;}',
     '.mt-ptheme .btn-call,.mt-ptheme .btn-put{border-radius:14px!important;font-weight:800!important;letter-spacing:.4px;',
     'box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 18px rgba(0,0,0,.3)!important;}',
-    '.mt-ptheme .widget-slot{background:#120c27!important;border-color:var(--mt-line)!important;}',
-    '.mt-ptheme .widget-slot *{font-family:var(--mt-font)!important;}',
-    '.mt-ptheme .widget-slot__header{background:#160f2b!important;border-color:var(--mt-line)!important;}',
-    '.mt-ptheme .widget-slot__header .divider li a{border-radius:999px!important;}',
-    '.mt-ptheme .widget-slot__header .divider li.active a{background:var(--mt-grad)!important;color:#fff!important;}',
-    '.mt-ptheme .deals-list__group-label{color:var(--mt-muted)!important;font-weight:700!important;letter-spacing:.4px;}',
-    '.mt-ptheme .deals-list__item{border-color:var(--mt-line)!important;}',
-    '.mt-ptheme .deals-list__item:hover{background:rgba(139,92,246,.08)!important;}',
     '.mt-ptheme .top-left-block .items__link,.mt-ptheme .top-left-block .currencies-block__in{background:rgba(22,15,43,.92)!important;border:1px solid var(--mt-line)!important;border-radius:10px!important;}',
     '.mt-ptheme .drop-down-modal{background:#160f2b!important;border:1px solid var(--mt-line)!important;border-radius:14px!important;}',
-    '.mt-ptheme .drop-down-modal *{font-family:var(--mt-font)!important;}',
+    '.mt-ptheme .drop-down-modal *:not(.fa){font-family:var(--mt-font)!important;}',
+    '.mt-ptheme .drop-down-modal .fa-star-o,.mt-ptheme .drop-down-modal .fa-star{color:var(--mt-muted)!important;}',
+    '.mt-ptheme .drop-down-modal .alist__item--active{background:rgba(139,92,246,.18)!important;}',
     '.mt-ptheme .h-btn--deposit{border-radius:12px!important;}',
-    '.mt-ptheme .widget-slot #mt-sum{margin:8px 10px 6px;}'
+    /* «Угоди» на ПК */
+    '.mt-ptheme .widget-slot.deals,.mt-ptheme .widget-slot.deals .widget-slot__body{background:#120c27!important;border-color:var(--mt-line)!important;}',
+    '.mt-ptheme .widget-slot.deals *:not(.fa){font-family:var(--mt-font)!important;}',
+    '.mt-ptheme .widget-slot.deals .widget-slot__header{background:#120c27!important;border:0!important;padding-bottom:2px!important;}',
+    '.mt-ptheme .widget-slot.deals .widget-slot__header .title{background:transparent!important;font-weight:800!important;font-size:15px!important;color:var(--mt-ink)!important;}',
+    '.mt-ptheme .widget-slot.deals #mt-sum{margin:2px 10px 10px!important;}',
+    '.mt-ptheme .widget-slot.deals .divider{margin:0 10px 8px!important;height:auto!important;border:0!important;}',
+    '.mt-ptheme .widget-slot.deals .divider ul{display:flex!important;gap:4px!important;padding:4px!important;margin:0!important;border-radius:12px!important;',
+    'background:var(--mt-night)!important;border:1px solid var(--mt-line)!important;}',
+    '.mt-ptheme .widget-slot.deals .divider li{flex:1 1 0!important;margin:0!important;border:0!important;background:transparent!important;}',
+    '.mt-ptheme .widget-slot.deals .divider li::before,.mt-ptheme .widget-slot.deals .divider li::after,.mt-ptheme .widget-slot.deals .divider li a::after,.mt-ptheme .widget-slot.deals .divider li a::before{display:none!important;}',
+    '.mt-ptheme .widget-slot.deals .divider li a{height:30px!important;border-radius:9px!important;background:transparent!important;color:var(--mt-muted)!important;',
+    'font-weight:700!important;font-size:13px!important;border:0!important;box-shadow:none!important;}',
+    '.mt-ptheme .widget-slot.deals .divider li a:hover{color:var(--mt-ink)!important;}',
+    '.mt-ptheme .widget-slot.deals .divider li.active a{background:var(--mt-grad)!important;color:#fff!important;}',
+    '.mt-ptheme .widget-slot.deals .deals-list__group-label{background:transparent!important;color:var(--mt-muted)!important;font-weight:700!important;',
+    'font-size:10px!important;letter-spacing:.8px!important;text-transform:uppercase;padding:10px 14px 6px!important;height:auto!important;justify-content:flex-start!important;}',
+    '.mt-ptheme .widget-slot.deals .deals-list__item{background:rgba(22,15,43,.92)!important;border:1px solid var(--mt-line)!important;border-radius:12px!important;',
+    'margin:0 10px 6px!important;padding:8px 12px!important;transition:border-color .15s,background .15s;}',
+    '.mt-ptheme .widget-slot.deals .deals-list__item:hover{border-color:rgba(139,92,246,.55)!important;background:rgba(139,92,246,.10)!important;}',
+    '.mt-ptheme .widget-slot.deals .item-row{color:var(--mt-muted)!important;font-size:12px!important;}',
+    '.mt-ptheme .widget-slot.deals .item-row a{color:var(--mt-ink)!important;font-weight:700!important;}',
+    '.mt-ptheme .widget-slot.deals .item-row + .item-row{margin-top:4px!important;color:var(--mt-ink)!important;font-weight:700!important;}',
+    '.mt-ptheme .widget-slot.deals .price-up{color:var(--mt-mint)!important;}',
+    '.mt-ptheme .widget-slot.deals .price-down{color:var(--mt-rose)!important;}',
+    '.mt-ptheme .widget-slot.deals .fa-arrow-up{color:var(--mt-mint)!important;margin-right:4px;}',
+    '.mt-ptheme .widget-slot.deals .fa-arrow-down{color:var(--mt-rose)!important;margin-right:4px;}',
+    '.mt-ptheme .widget-slot.deals .favorites .fa{color:var(--mt-muted)!important;margin-right:4px;}',
+    /* меню профілю — як на телефоні */
+    '.mt-ptheme .profile-menu__panel{background:var(--mt-night)!important;border-left:1px solid var(--mt-line)!important;}',
+    '.mt-ptheme .profile-menu__panel *:not(.fa){font-family:var(--mt-font)!important;}',
+    '.mt-ptheme .profile-menu__status-bg{background:radial-gradient(320px 380px at 0 0,rgba(139,92,246,.35),transparent 70%)!important;}',
+    '.mt-ptheme .profile-menu__menu{background:#130d28!important;border-top:1px solid var(--mt-line)!important;}',
+    '.mt-ptheme .profile-menu__card,.mt-ptheme .profile-menu__chip,.mt-ptheme .profile-menu__lang{background:rgba(22,15,43,.95)!important;border:1px solid var(--mt-line)!important;border-radius:16px!important;}',
+    '.mt-ptheme .profile-menu__row-inner{border-color:var(--mt-line)!important;}',
+    '.mt-ptheme .profile-menu__head-btn,.mt-ptheme .profile-menu__withdrawal-btn{background:rgba(139,92,246,.14)!important;border-radius:12px!important;}',
+    '.mt-ptheme .profile-menu__deposit-btn{border-radius:12px!important;}',
+    '.mt-ptheme .profile-menu__row:hover{background:rgba(139,92,246,.08)!important;}'
   ].join('');
 
   var st = document.createElement('style');
@@ -884,8 +940,13 @@
   })();
   function wsOnline() { var s = window.__mtWS; return !!(s && s.readyState === 1); }
 
-  // ---------- звук сигналів ----------
-  var SND = { on: lsGet('snd', true), vol: lsGet('sndVol', 70), strat: lsGet('sndStrat', true), share: lsGet('sndShare', true) };
+  // ---------- звук сигналів: окремо для BB, ST+CCI і сигналів трейдерів ----------
+  var SND = {
+    on: lsGet('snd', true), vol: lsGet('sndVol', 70),
+    bb: lsGet('sndBb', lsGet('sndStrat', true)), st: lsGet('sndSt', lsGet('sndStrat', true)), share: lsGet('sndShare', true)
+  };
+  var SND_KEY = { on: 'snd', bb: 'sndBb', st: 'sndSt', share: 'sndShare' };
+  function setSnd(k, v) { SND[k] = v; lsSet(SND_KEY[k], v); paintSound(); syncBar(); }
   var actx = null;
   function ac() {
     try {
@@ -898,12 +959,12 @@
   if (PC) ['pointerdown', 'keydown'].forEach(function (t) {
     document.addEventListener(t, function () { if (SND.on) ac(); }, { capture: true, passive: true });
   });
-  function tone(seq, type) {
+  function tone(seq, type, gap) {
     var c = ac();
     if (!c) return;
     var t0 = c.currentTime + 0.02, v = Math.max(0.0002, SND.vol / 100 * 0.35);
     seq.forEach(function (f, i) {
-      var o = c.createOscillator(), g = c.createGain(), s = t0 + i * 0.13;
+      var o = c.createOscillator(), g = c.createGain(), s = t0 + i * (gap || 0.13);
       o.type = type || 'sine'; o.frequency.value = f;
       g.gain.setValueAtTime(0.0001, s);
       g.gain.exponentialRampToValueAtTime(v, s + 0.015);
@@ -911,13 +972,18 @@
       o.connect(g); g.connect(c.destination); o.start(s); o.stop(s + 0.26);
     });
   }
-  function playKind(k) {
-    if (!SND.on) return;
-    if (k === 'share') { if (SND.share) tone([523, 784], 'triangle'); return; }
-    if (!SND.strat) return;
-    if (/entry|confirm/i.test(k)) tone([660, 880, 1100]);   // вхід / підтвердження
-    else if (/live/i.test(k)) tone([740, 988]);             // дотик живої лінії
-    else tone([660]);                                       // можливий дотик / відкат
+  // BB — «дзвіночок» (sine), ST+CCI — м'якший тембр (triangle) і інша мелодія, трейдери — «дінь-дон»
+  var SOUNDS = {
+    bb: { soft: [[660], 'sine'], live: [[740, 988], 'sine'], entry: [[660, 880, 1100], 'sine'] },
+    st: { soft: [[523, 587], 'triangle'], entry: [[523, 659, 784, 1047], 'triangle'] },
+    share: [[988, 784], 'sine']
+  };
+  function playSignal(strat, level, force) {
+    if (!force && !SND.on) return;
+    if (strat === 'share') { if (force || SND.share) tone(SOUNDS.share[0], SOUNDS.share[1], 0.18); return; }
+    if (!force && !SND[strat]) return;
+    var set = SOUNDS[strat] || SOUNDS.bb, s = set[level] || set.entry || set.soft;
+    tone(s[0], s[1]);
   }
   function watchSignals() {
     var sc = $('po-scanner-list'), sh = $('po-share-list');
@@ -927,17 +993,18 @@
         var k = li.getAttribute('data-kind') || '';
         if (li.__mtK === k) return;
         li.__mtK = k;
-        var r = /entry|confirm/i.test(k) ? 'entry' : (/live/i.test(k) ? 'live' : 'soft');
-        if (!best || rank[r] > rank[best]) best = r;
+        var strat = /^st/i.test(k) || /^st\|/i.test(li.getAttribute('data-key') || '') ? 'st' : 'bb';
+        var lvl = /entry|confirm/i.test(k) ? 'entry' : (/live/i.test(k) ? 'live' : 'soft');
+        if (!SND[strat]) return;
+        if (!best || rank[lvl] > rank[best.lvl]) best = { strat: strat, lvl: lvl };
       });
       var shared = false;
       if (sh) [].slice.call(sh.children).forEach(function (li) { if (!li.__mtSeen) { li.__mtSeen = 1; shared = true; } });
       if (silent) return;
-      if (best) playKind(best === 'soft' ? 'warning' : best);
-      else if (shared) playKind('share');
+      if (best) playSignal(best.strat, best.lvl);
+      else if (shared) playSignal('share');
     }
-    [[sc, 'sc'], [sh, 'sh']].forEach(function (p) {
-      var n = p[0];
+    [sc, sh].forEach(function (n) {
       if (!n || n.__mtSnd) return;
       n.__mtSnd = 1;
       scan(true);
@@ -946,7 +1013,52 @@
     });
   }
 
-  // ---------- гарячі клавіші: стандартні як у моді + можна задати свої ----------
+  // ---------- дії PO, які можна викликати кнопкою або клавішею ----------
+  var passing = false, capturing = null;
+  function modKey(k) {
+    passing = true;
+    try { window.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })); } finally { passing = false; }
+  }
+  function closeDropDown() {
+    var w = document.querySelector('.drop-down-modal-wrap');
+    if (!w) return;
+    w.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    w.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  }
+  function waitFor(fn, cb) {
+    var n = 0;
+    (function go() { var r = fn(); if (r) { cb(r); return; } if (n++ < 20) setTimeout(go, 50); else closeDropDown(); })();
+  }
+  function pcDraw(type) {
+    if (!document.querySelector('.drop-down-modal--drawings-list')) { var b = document.querySelector('.items__link--drawings'); if (!b) return; b.click(); }
+    waitFor(function () { return document.querySelector('.drop-down-modal--drawings-list .list-item[data-type="' + type + '"]'); },
+      function (it) { it.click(); setTimeout(closeDropDown, 80); });
+  }
+  function tfOpener() { return document.querySelector('.items__link--chart-type:not(.chart-layout-options-btn)'); }
+  function pcTF(t) {
+    if (!document.querySelector('.drop-down-modal--chart-type')) { var o = tfOpener(); if (!o) return; o.click(); }
+    waitFor(function () {
+      return [].slice.call(document.querySelectorAll('.time-frames-block a')).filter(function (a) {
+        var sp = a.querySelector('span'); return sp && sp.textContent.trim() === t;
+      })[0];
+    }, function (l) { l.click(); setTimeout(closeDropDown, 80); });
+  }
+  function amountOp(i) {   // 0 — помножити на k, 1 — поділити на k (кнопки калькулятора PO)
+    if (document.querySelector('.amount-list-modal')) amtToggle();
+    wait(150).then(function () { amtToggle(); return wait(400); }).then(function () {
+      readPoK();
+      var btn = document.querySelectorAll('.amount-list-modal .multiply__btn')[i];
+      if (btn) btn.click();
+      return wait(250);
+    }).then(function () { if (document.querySelector('.amount-list-modal')) amtToggle(); paintQuick(); });
+  }
+  function toggleHtml(cls, key) { var on = !document.documentElement.classList.contains(cls); document.documentElement.classList.toggle(cls, on); lsSet(key, on); }
+  if (PC) {
+    if (lsGet('noCards', false)) document.documentElement.classList.add('mt-nocards');
+    if (lsGet('noBar', false)) document.documentElement.classList.add('mt-nobar');
+  }
+
+  // ---------- стандартні клавіші (як у моді) — можна перепризначити ----------
   var ACTS = [
     { id: 'up', n: 'Попередній актив', mod: 'ArrowUp', def: ['ArrowUp'] },
     { id: 'down', n: 'Наступний актив', mod: 'ArrowDown', def: ['ArrowDown'] },
@@ -958,17 +1070,36 @@
     { id: 'tf5', n: 'Таймфрейм M5', mod: '5', def: ['5'] },
     { id: 'tf10', n: 'Таймфрейм M10', mod: '6', def: ['6'] },
     { id: 'tf15', n: 'Таймфрейм M15', mod: '7', def: ['7'] },
-    { id: 'alltf', n: 'Усі таймфрейми', def: [] },
     { id: 'hline', n: 'Горизонтальна лінія', mod: 'l', def: ['L'] },
-    { id: 'trend', n: 'Лінія тренда', def: [] },
     { id: 'rect', n: 'Прямокутник', mod: 'k', def: ['K'] },
     { id: 'fib', n: 'Лінії Фібоначчі', mod: ';', def: [';'] },
-    { id: 'undo', n: 'Видалити останню побудову', mod: 'Backspace', def: ['Backspace', 'Delete'] },
-    { id: 'send', n: 'Надіслати сигнал', def: [] },
-    { id: 'menu', n: 'Меню моду', def: [] },
-    { id: 'sound', n: 'Звук увімк. / вимк.', def: [] }
+    { id: 'undo', n: 'Видалити останню побудову', mod: 'Backspace', def: ['Backspace', 'Delete'] }
   ];
-  var KEYS = lsGet('keys', {});   // id -> "Alt+S" | null (вимкнено)
+  // ---------- каталог дій для «своїх клавіш» ----------
+  var DRAW_NAMES = ['Горизонтальна лінія', 'Вертикальна лінія', 'Промінь', 'Лінії Фібоначчі', 'Віяло Фібоначчі', 'Лінія тренда', 'Паралельний канал', 'Прямокутник', 'Вила Ендрюса'];
+  var TF_ALL = ['S5', 'S10', 'S15', 'S30', 'M1', 'M2', 'M3', 'M5', 'M10', 'M15', 'M30', 'H1', 'H4', 'D1'];
+  var CAT = [];
+  TF_ALL.forEach(function (t) { CAT.push({ id: 'tf:' + t, g: 'Таймфрейм', n: t, run: function () { pcTF(t); } }); });
+  CAT.push({ id: 'tf:list', g: 'Таймфрейм', n: 'Відкрити список таймфреймів', run: function () { var o = tfOpener(); if (o) o.click(); } });
+  DRAW_NAMES.forEach(function (n, i) { CAT.push({ id: 'draw:' + i, g: 'Малювання', n: n, run: function () { pcDraw(i); } }); });
+  CAT.push({ id: 'draw:list', g: 'Малювання', n: 'Відкрити список побудов', run: function () { var b = document.querySelector('.items__link--drawings'); if (b) b.click(); } });
+  CAT.push({ id: 'amt:mul', g: 'Угода', n: 'Помножити суму на k', run: function () { amountOp(0); } });
+  CAT.push({ id: 'amt:div', g: 'Угода', n: 'Поділити суму на k', run: function () { amountOp(1); } });
+  CAT.push({ id: 'mod:send', g: 'Мод', n: 'Надіслати сигнал', run: function () { var t = $('po-send-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
+  CAT.push({ id: 'mod:menu', g: 'Мод', n: 'Відкрити меню моду', run: function () { var t = $('po-settings-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
+  CAT.push({ id: 'snd:all', g: 'Звук', n: 'Звук сигналів увімк. / вимк.', run: function () { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } } });
+  CAT.push({ id: 'snd:bb', g: 'Звук', n: 'Звук BB увімк. / вимк.', run: function () { setSnd('bb', !SND.bb); } });
+  CAT.push({ id: 'snd:st', g: 'Звук', n: 'Звук ST+CCI увімк. / вимк.', run: function () { setSnd('st', !SND.st); } });
+  CAT.push({ id: 'snd:share', g: 'Звук', n: 'Звук сигналів трейдерів увімк. / вимк.', run: function () { setSnd('share', !SND.share); } });
+  CAT.push({ id: 'ui:cards', g: 'Інтерфейс', n: 'Сховати / показати картки сигналів', run: function () { toggleHtml('mt-nocards', 'noCards'); } });
+  CAT.push({ id: 'ui:bar', g: 'Інтерфейс', n: 'Сховати / показати панель MoonTrade', run: function () { toggleHtml('mt-nobar', 'noBar'); } });
+  CAT.push({ id: 'ui:clean', g: 'Інтерфейс', n: 'Чистий інтерфейс увімк. / вимк.', run: function () { OPT.clean = !OPT.clean; lsSet('clean', OPT.clean); applyOpts(); paintSettings(); } });
+  CAT.push({ id: 'ui:theme', g: 'Інтерфейс', n: 'Стиль MoonTrade увімк. / вимк.', run: function () { OPT.theme = !OPT.theme; lsSet('theme', OPT.theme); applyOpts(); paintSettings(); } });
+  CAT.push({ id: 'ui:header', g: 'Інтерфейс', n: 'Велика назва в хедері увімк. / вимк.', run: function () { var t = document.querySelector('#po-toggle-header .po-toggle') || $('po-toggle-header'); if (t) t.click(); } });
+  function catById(id) { for (var i = 0; i < CAT.length; i++) if (CAT[i].id === id) return CAT[i]; return null; }
+
+  var KEYS = lsGet('keys', {});    // перепризначені стандартні: id -> "Alt+S" | null (вимкнено)
+  var CUST = lsGet('ckeys', []);   // свої: [{ a: 'tf:H1', k: 'Alt+H' }]
   function actById(id) { for (var i = 0; i < ACTS.length; i++) if (ACTS[i].id === id) return ACTS[i]; return null; }
   function sigOf(e) {
     var c = e.code || '', m;
@@ -989,43 +1120,21 @@
     if (Object.prototype.hasOwnProperty.call(KEYS, a.id)) return KEYS[a.id] ? [KEYS[a.id]] : [];
     return a.def;
   }
-  var passing = false, capturing = null;
-  function modKey(k) {
-    passing = true;
-    try { window.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })); } finally { passing = false; }
+  function freeKey(s, except) {   // клавіша може належати лише одній дії
+    ACTS.forEach(function (b) { if (b.id !== except && effSigs(b).indexOf(s) > -1) KEYS[b.id] = null; });
+    CUST.forEach(function (c, i) { if ('c' + i !== except && c.k === s) c.k = null; });
   }
-  function closeDropDown() {
-    var w = document.querySelector('.drop-down-modal-wrap');
-    if (!w) return;
-    w.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
-    w.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-  }
-  function pcDraw(type) {
-    var open = !!document.querySelector('.drop-down-modal--drawings-list');
-    if (!open) { var b = document.querySelector('.items__link--drawings'); if (!b) return; b.click(); }
-    var n = 0;
-    (function tryIt() {
-      var it = document.querySelector('.drop-down-modal--drawings-list .list-item[data-type="' + type + '"]');
-      if (it) { it.click(); setTimeout(closeDropDown, 80); return; }
-      if (n++ < 20) setTimeout(tryIt, 50);
-    })();
+  function assignKey(id, s) {
+    freeKey(s, id);
+    if (id.charAt(0) === 'c' && /^c\d+$/.test(id)) { var c = CUST[+id.slice(1)]; if (c) c.k = s; }
+    else { var a = actById(id); if (a && a.def[0] === s && a.def.length === 1) delete KEYS[id]; else KEYS[id] = s; }
+    lsSet('keys', KEYS); lsSet('ckeys', CUST);
   }
   function runAct(id) {
     var a = actById(id);
-    if (!a) return;
-    if (a.mod) { modKey(a.mod); setTimeout(syncBar, 400); return; }
-    if (id === 'alltf') { var o = document.querySelector('.items__link--chart-type:not(.chart-layout-options-btn)'); if (o) o.click(); }
-    else if (id === 'trend') pcDraw(5);
-    else if (id === 'send' || id === 'menu') { var t = $(id === 'send' ? 'po-send-btn' : 'po-settings-btn'); if (t) setTimeout(function () { t.click(); }, 0); }
-    else if (id === 'sound') { SND.on = !SND.on; lsSet('snd', SND.on); if (SND.on) { ac(); tone([660, 880]); } syncBar(); paintSound(); }
-  }
-  function assignKey(id, s) {
-    ACTS.forEach(function (b) {
-      if (b.id !== id && effSigs(b).indexOf(s) > -1) KEYS[b.id] = null;   // ця клавіша була зайнята — звільняємо
-    });
-    var a = actById(id);
-    if (a && a.def[0] === s && a.def.length === 1) delete KEYS[id]; else KEYS[id] = s;
-    lsSet('keys', KEYS);
+    if (a) { modKey(a.mod); return; }
+    var c = catById(id);
+    if (c) c.run();
   }
   if (PC) window.addEventListener('keydown', function (e) {
     if (passing) return;
@@ -1033,50 +1142,48 @@
       e.preventDefault(); e.stopImmediatePropagation();
       if (e.key === 'Escape') { capturing = null; paintKeys(); return; }
       if (/^(Shift|Control|Alt|Meta|OS)$/.test(e.key)) return;
-      assignKey(capturing, sigOf(e)); capturing = null; paintKeys(); syncBar(true);
+      assignKey(capturing, sigOf(e)); capturing = null; paintKeys();
       return;
     }
     var t = e.target;
-    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
     var s = sigOf(e), i, a;
     for (i = 0; i < ACTS.length; i++) {
       a = ACTS[i];
       if (KEYS[a.id] && KEYS[a.id] === s) { e.preventDefault(); e.stopImmediatePropagation(); runAct(a.id); return; }
     }
-    // стандартна клавіша дії, яку перепризначили, більше не спрацьовує
+    for (i = 0; i < CUST.length; i++) {
+      if (CUST[i].k && CUST[i].k === s && CUST[i].a) { e.preventDefault(); e.stopImmediatePropagation(); runAct(CUST[i].a); return; }
+    }
+    // стандартна клавіша, яку перепризначили або вимкнули, більше не спрацьовує
     if (!(e.ctrlKey || e.altKey || e.metaKey)) {
       var plain = s.replace(/^Shift\+/, '');
       for (i = 0; i < ACTS.length; i++) {
         a = ACTS[i];
-        if (a.mod && Object.prototype.hasOwnProperty.call(KEYS, a.id) && a.def.indexOf(plain) > -1) { e.stopImmediatePropagation(); return; }
+        if (Object.prototype.hasOwnProperty.call(KEYS, a.id) && a.def.indexOf(plain) > -1) { e.stopImmediatePropagation(); return; }
       }
     }
   }, true);
 
-  // ---------- верхня панель MoonTrade (можна перетягнути) ----------
-  var BAR = [
-    ['grip'], ['up', '▲'], ['down', '▼'], ['sep'],
-    ['tf1', 'M1'], ['tf2', 'M2'], ['tf3', 'M3'], ['tf5', 'M5'], ['tf10', 'M10'], ['tf15', 'M15'], ['alltf', 'ТФ ▾'], ['sep'],
-    ['hline', '—'], ['trend', '╱'], ['rect', '▭'], ['fib', 'Ф'], ['undo', '⌫'], ['sep'],
-    ['send', '📣'], ['sound', '🔊'], ['menu', '☰'], ['sep'], ['status']
-  ];
+  // ---------- панель MoonTrade (зверху, можна перетягнути) ----------
   function setupPC() {
     if (!PC || $('mt-bar')) return;
     var bar = el('div', { id: 'mt-bar' });
-    bar.innerHTML = '<div class="mt-grp">' + BAR.map(function (b) {
-      if (b[0] === 'grip') return '<div class="mt-grip" title="Перетягніть панель"></div>';
-      if (b[0] === 'sep') return '</div><div class="mt-sep"></div><div class="mt-grp">';
-      if (b[0] === 'status') return '<div class="mt-st" id="mt-st"><span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span></div>';
-      return '<button type="button" data-a="' + b[0] + '"' + (b[0] === 'send' ? ' class="mt-primary"' : '') + '>' + b[1] + '</button>';
-    }).join('') + '</div>';
+    bar.innerHTML =
+      '<div class="mt-grip" title="Перетягніть панель"></div>' +
+      '<button type="button" data-a="send" class="mt-send" title="Надіслати сигнал (поділитися угодою)">📣 Надіслати</button>' +
+      '<button type="button" data-a="sound" class="mt-ico"></button>' +
+      '<button type="button" data-a="menu" class="mt-ico" title="Меню моду">☰</button>' +
+      '<div class="mt-st" id="mt-st"><span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span></div>';
     document.documentElement.appendChild(bar);
     bar.addEventListener('click', function (e) {
       var b = e.target.closest('button[data-a]');
       if (!b) return;
       e.stopPropagation();
-      runAct(b.getAttribute('data-a'));
+      var a = b.getAttribute('data-a');
+      if (a === 'sound') { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } }
+      else runAct(a === 'send' ? 'mod:send' : 'mod:menu');
     });
-    // перетягування за ручку
     var grip = bar.querySelector('.mt-grip'), dx = 0, dy = 0, drag = false;
     grip.addEventListener('mousedown', function (e) {
       drag = true; var r = bar.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top;
@@ -1089,7 +1196,7 @@
       var r = bar.getBoundingClientRect(); lsSet('barPos', { x: Math.round(r.left), y: Math.round(r.top) });
     });
     window.addEventListener('resize', function () { placeBarSaved(); });
-    syncBar(true);
+    syncBar();
     placeBarSaved();
   }
   function placeBar(x, y) {
@@ -1099,41 +1206,31 @@
     bar.style.left = Math.round(Math.max(4, Math.min(window.innerWidth - w - 4, x))) + 'px';
     bar.style.top = Math.round(Math.max(4, Math.min(window.innerHeight - h - 4, y))) + 'px';
   }
-  // початково — зверху графіка, праворуч від інструментів PO (або під ними, якщо не вміщується)
+  // початково — у рядку з інструментами PO над графіком (або одразу під ними, якщо не вміщується)
   function barDefault() {
     var bar = $('mt-bar'), tb = document.querySelector('.top-left-block__block1');
-    var chart = document.querySelector('canvas.layer.plot') || document.querySelector('.layout-container');
-    if (!bar || !tb || !chart) return { x: 100, y: 70 };
-    var c = chart.getBoundingClientRect(), r = tb.getBoundingClientRect(), right = c.right - 70;
-    bar.style.maxWidth = 'none';
+    var plot = document.querySelector('canvas.layer.plot') || document.querySelector('.layout-container');
+    if (!bar || !tb || !plot) return { x: 100, y: 70 };
+    var c = plot.getBoundingClientRect(), r = tb.getBoundingClientRect();
     var w = bar.offsetWidth, h = bar.offsetHeight;
-    if (r.right + 12 + w <= right) return { x: r.right + 12, y: r.top + (r.height - h) / 2 };
-    // під інструментами PO; якщо графік вузький — панель переноситься у два рядки
-    bar.style.maxWidth = Math.max(220, right - r.left) + 'px';
-    return { x: r.left, y: r.bottom + 46 };
+    if (r.right + 12 + w <= c.right - 8) return { x: r.right + 12, y: r.top + (r.height - h) / 2 };
+    return { x: r.left, y: r.bottom + 44 };
   }
   function placeBarSaved() {
-    var p = lsGet('barPos', null);
-    if (p) { var bar = $('mt-bar'); if (bar) bar.style.maxWidth = 'none'; placeBar(p.x, p.y); return; }
-    p = barDefault();
+    var p = lsGet('barPos', null) || barDefault();
     placeBar(p.x, p.y);
   }
-  function syncBar(titles) {
+  function syncBar() {
     var bar = $('mt-bar');
     if (!bar) return;
-    if (titles) [].slice.call(bar.querySelectorAll('button[data-a]')).forEach(function (b) {
-      var a = actById(b.getAttribute('data-a')), k = a ? effSigs(a)[0] : null;
-      b.title = (a ? a.n : '') + (k ? '  [' + sigLabel(k) + ']' : '');
-    });
-    var tfEl = document.querySelector('.items__link--chart-type:not(.chart-layout-options-btn)');
-    var tf = tfEl ? (((tfEl.textContent || '').trim().match(/^[SMHD]\d+/) || [''])[0]) : '';
-    [].slice.call(bar.querySelectorAll('button[data-a^="tf"]')).forEach(function (b) { b.classList.toggle('mt-on', b.textContent === tf); });
     var sb = bar.querySelector('[data-a="sound"]');
-    if (sb) { sb.textContent = SND.on ? '🔊' : '🔇'; sb.classList.toggle('mt-off', !SND.on); }
+    if (sb) { sb.textContent = SND.on ? '🔊' : '🔇'; sb.classList.toggle('mt-off', !SND.on); sb.title = SND.on ? 'Звук сигналів увімкнений' : 'Звук сигналів вимкнений'; }
     var on = wsOnline(), dot = $('mt-dot');
-    if (dot) { dot.classList.toggle('on', on); dot.title = on ? 'Мод підключений до сервера' : 'Немає з’єднання з сервером моду'; }
-    var oc = $('po-online-count'), mo = $('mt-online');
-    if (mo) { var t = oc ? (oc.textContent || '').replace(/\s*online/i, '').trim() : ''; mo.textContent = t || '—'; var st = $('mt-st'); if (st) st.title = (on ? 'Мод підключений' : 'Немає з’єднання з сервером моду') + (t ? ' · онлайн: ' + t : ''); }
+    if (dot) dot.classList.toggle('on', on);
+    var oc = $('po-online-count'), mo = $('mt-online'), st = $('mt-st');
+    var t = oc ? (oc.textContent || '').replace(/\s*online/i, '').trim() : '';
+    if (mo) mo.textContent = on ? (t ? t + ' онлайн' : 'онлайн') : 'офлайн';
+    if (st) st.title = on ? 'Мод підключений до сервера' + (t ? ' · трейдерів онлайн: ' + t : '') : 'Немає з’єднання з сервером моду';
   }
 
   // ---------- чистий інтерфейс на ПК ----------
@@ -1185,7 +1282,7 @@
   // ---------- меню моду на ПК: вкладки ----------
   var TABS = [['sig', 'Сигнали'], ['pay', 'Виплати'], ['ui', 'Інтерфейс'], ['snd', 'Звук'], ['keys', 'Клавіші']];
   function secOf(n) {
-    if (n.querySelector && (n.id === 'po-toggle-header' || n.id === 'po-toggle-hud')) return 'ui';
+    if (n.id === 'po-toggle-header' || n.id === 'po-toggle-hud') return 'ui';
     if (/^po-toggle-(share|scanner|stcci)$/.test(n.id) || (n.querySelector && n.querySelector('#po-nickname-input'))) return 'sig';
     if (n.id === 'po-range-wrap') return 'pay';
     return null;
@@ -1224,7 +1321,7 @@
       if (!set.querySelector('[data-o="barpos"]')) {
         var r = el('div', { 'class': 'mt-btnrow', 'data-o': 'barpos' },
           '<span>Панель MoonTrade<small>Перетягується за ліву ручку</small></span><button type="button">Повернути нагору</button>');
-        r.querySelector('button').addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); lsSet('barPos', null); placeBarSaved(); });
+        r.querySelector('button').addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); lsSet('barPos', null); document.documentElement.classList.remove('mt-nobar'); lsSet('noBar', false); placeBarSaved(); });
         set.appendChild(r);
       }
     }
@@ -1244,19 +1341,19 @@
       p = el('div', { id: 'mt-snd', 'class': 'mt-pane', 'data-mt-tab': 'snd' });
       p.innerHTML =
         '<div class="mt-h">Звук сигналів</div>' +
-        '<label data-s="on"><span>Звук сигналів<small>Чути, навіть коли вкладка неактивна</small></span><span class="mt-sw"></span></label>' +
-        '<label data-s="strat"><span>Стратегії BB і ST+CCI<small>Можливий дотик — 1 тон, дотик лінії — 2, вхід — 3</small></span><span class="mt-sw"></span></label>' +
-        '<label data-s="share"><span>Сигнали від трейдерів</span><span class="mt-sw"></span></label>' +
-        '<div class="mt-vol"><span>Гучність</span><input type="range" min="5" max="100" step="5"><b></b></div>' +
-        '<div class="mt-btnrow"><span>Перевірка</span><button type="button" data-s="test">▶ Програти звук входу</button></div>';
+        '<label data-s="on"><span>Звук сигналів<small>Головний вимикач. Чути, навіть коли вкладка неактивна</small></span><span class="mt-sw"></span></label>' +
+        '<div class="mt-snd-row"><label data-s="bb"><span>Bollinger (BB)<small>Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3</small></span><span class="mt-sw"></span></label><button type="button" data-t="bb" title="Прослухати">▶</button></div>' +
+        '<div class="mt-snd-row"><label data-s="st"><span>SuperTrend + CCI<small>М’якший тембр: відкат — 2 тони, вхід — 4</small></span><span class="mt-sw"></span></label><button type="button" data-t="st" title="Прослухати">▶</button></div>' +
+        '<div class="mt-snd-row"><label data-s="share"><span>Сигнали від трейдерів<small>«Дінь-дон»</small></span><span class="mt-sw"></span></label><button type="button" data-t="share" title="Прослухати">▶</button></div>' +
+        '<div class="mt-vol"><span>Гучність</span><input type="range" min="5" max="100" step="5"><b></b></div>';
       p.addEventListener('click', function (e) {
-        var lb = e.target.closest('label[data-s]'), tb = e.target.closest('[data-s="test"]');
-        if (lb) { e.preventDefault(); e.stopPropagation(); var k = lb.getAttribute('data-s'); SND[k] = !SND[k]; lsSet(k === 'on' ? 'snd' : 'snd' + k.charAt(0).toUpperCase() + k.slice(1), SND[k]); paintSound(); syncBar(); }
-        if (tb) { e.preventDefault(); e.stopPropagation(); ac(); var was = SND.on; SND.on = true; playKind('entry'); SND.on = was; }
+        var lb = e.target.closest('label[data-s]'), tb = e.target.closest('button[data-t]');
+        if (lb) { e.preventDefault(); e.stopPropagation(); var k = lb.getAttribute('data-s'); setSnd(k, !SND[k]); }
+        if (tb) { e.preventDefault(); e.stopPropagation(); ac(); var t = tb.getAttribute('data-t'); playSignal(t, 'entry', true); }
       });
       var rg = p.querySelector('input[type=range]');
       rg.addEventListener('input', function () { SND.vol = +rg.value; lsSet('sndVol', SND.vol); paintSound(); });
-      rg.addEventListener('change', function () { ac(); var was = SND.on; SND.on = true; playKind('warning'); SND.on = was; });
+      rg.addEventListener('change', function () { ac(); playSignal('bb', 'soft', true); });
       md.insertBefore(p, body.nextSibling);
     }
     paintSound();
@@ -1265,6 +1362,7 @@
     var p = $('mt-snd');
     if (!p) return;
     [].slice.call(p.querySelectorAll('label[data-s]')).forEach(function (lb) { lb.querySelector('.mt-sw').classList.toggle('on', !!SND[lb.getAttribute('data-s')]); });
+    p.classList.toggle('mt-muted', !SND.on);
     var rg = p.querySelector('input[type=range]');
     if (document.activeElement !== rg) rg.value = SND.vol;
     p.querySelector('.mt-vol b').textContent = SND.vol + '%';
@@ -1277,20 +1375,41 @@
         var b = e.target.closest('button');
         if (!b) return;
         e.preventDefault(); e.stopPropagation();
-        var id = b.getAttribute('data-id');
+        var id = b.getAttribute('data-id'), k = b.getAttribute('data-k');
         if (b.classList.contains('mt-kb')) { capturing = capturing === id ? null : id; }
-        else if (b.classList.contains('mt-kr')) { delete KEYS[id]; lsSet('keys', KEYS); }
-        else if (b.getAttribute('data-k') === 'all') { KEYS = {}; lsSet('keys', KEYS); capturing = null; }
-        paintKeys(); syncBar(true);
+        else if (b.classList.contains('mt-kr')) {
+          if (/^c\d+$/.test(id)) CUST.splice(+id.slice(1), 1); else delete KEYS[id];
+          capturing = null;
+        }
+        else if (k === 'add') { CUST.push({ a: '', k: null }); capturing = null; }
+        else if (k === 'all') { KEYS = {}; capturing = null; }
+        lsSet('keys', KEYS); lsSet('ckeys', CUST);
+        paintKeys();
+      });
+      p.addEventListener('change', function (e) {
+        var s = e.target.closest('select[data-ci]');
+        if (!s) return;
+        var c = CUST[+s.getAttribute('data-ci')];
+        if (c) { c.a = s.value; lsSet('ckeys', CUST); }
+        paintKeys();
       });
       md.insertBefore(p, ($('mt-snd') || body).nextSibling);
     }
     paintKeys();
   }
+  function catOptions(sel) {
+    var groups = [], seen = {};
+    CAT.forEach(function (c) { if (!seen[c.g]) { seen[c.g] = 1; groups.push(c.g); } });
+    return '<option value="">— оберіть дію —</option>' + groups.map(function (g) {
+      return '<optgroup label="' + g + '">' + CAT.filter(function (c) { return c.g === g; }).map(function (c) {
+        return '<option value="' + c.id + '"' + (c.id === sel ? ' selected' : '') + '>' + c.n + '</option>';
+      }).join('') + '</optgroup>';
+    }).join('');
+  }
   function paintKeys() {
     var p = $('mt-keys');
     if (!p) return;
-    var html = '<div class="mt-h">Гарячі клавіші</div><div class="mt-note">Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати.</div>' +
+    var html = '<div class="mt-h">Гарячі клавіші моду</div><div class="mt-note">Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати. ↺ — повернути стандартну.</div>' +
       ACTS.map(function (a) {
         var s = effSigs(a), changed = Object.prototype.hasOwnProperty.call(KEYS, a.id);
         var lbl = capturing === a.id ? 'Натисніть…' : (s.length ? s.map(sigLabel).join(' / ') : '—');
@@ -1298,22 +1417,32 @@
           '<button type="button" class="mt-kb' + (capturing === a.id ? ' mt-wait' : '') + '" data-id="' + a.id + '">' + lbl + '</button>' +
           '<button type="button" class="mt-kr" data-id="' + a.id + '" title="Повернути стандартну"' + (changed ? '' : ' disabled') + '>↺</button></div>';
       }).join('') +
-      '<div class="mt-btnrow"><span>Усі клавіші</span><button type="button" data-k="all">Скинути до стандартних</button></div>';
+      '<div class="mt-btnrow"><span>Стандартні клавіші</span><button type="button" data-k="all">Скинути до стандартних</button></div>' +
+      '<div class="mt-h mt-h2">Свої клавіші</div><div class="mt-note">Додайте клавішу для будь-якої дії: таймфрейми S5–D1, усі інструменти малювання, множник суми, звук, інтерфейс.</div>' +
+      CUST.map(function (c, i) {
+        var id = 'c' + i, lbl = capturing === id ? 'Натисніть…' : (c.k ? sigLabel(c.k) : 'Задати');
+        return '<div class="mt-k mt-ck"><select data-ci="' + i + '">' + catOptions(c.a) + '</select>' +
+          '<button type="button" class="mt-kb' + (capturing === id ? ' mt-wait' : '') + (c.k ? '' : ' mt-empty') + '" data-id="' + id + '">' + lbl + '</button>' +
+          '<button type="button" class="mt-kr" data-id="' + id + '" title="Видалити">×</button></div>';
+      }).join('') +
+      '<div class="mt-btnrow"><span></span><button type="button" data-k="add" class="mt-add">+ Додати клавішу</button></div>';
     if (p.getAttribute('data-h') !== html) { p.innerHTML = html; p.setAttribute('data-h', html); }
   }
 
-  // ---------- підсумок «Сьогодні» в «Угодах» на ПК ----------
+  // ---------- «Угоди» на ПК: підсумок за сьогодні над вкладками ----------
+  var sumCache = '';
   function syncTradesPC() {
     var slot = document.querySelector('.widget-slot.deals');
     var sum = $('mt-sum');
-    var list = slot && slot.querySelector('.deals-list');
-    var act = slot && slot.querySelector('.widget-slot__header .divider li.active');
-    if (!list || !act || !OPT.theme || !/Закрит|Closed|Закрыт/i.test(act.textContent)) { if (sum) sum.remove(); return; }
-    var html = todayHtml(list);
+    if (!slot || !OPT.theme) { if (sum) sum.remove(); return; }
+    var hdr = slot.querySelector('.widget-slot__header'), div = hdr && hdr.querySelector('.divider');
+    var list = slot.querySelector('.deals-list');
+    var act = hdr && hdr.querySelector('.divider li.active');
+    if (list && act && /Закрит|Closed|Закрыт/i.test(act.textContent)) sumCache = todayHtml(list);
+    if (!sumCache || !div) { if (sum) sum.remove(); return; }
     if (!sum) sum = el('div', { id: 'mt-sum' });
-    var body = list.closest('.widget-slot__body') || list;
-    if (sum.nextSibling !== body) body.parentNode.insertBefore(sum, body);
-    if (sum.getAttribute('data-h') !== html) { sum.innerHTML = html; sum.setAttribute('data-h', html); }
+    if (sum.nextSibling !== div) hdr.insertBefore(sum, div);
+    if (sum.getAttribute('data-h') !== sumCache) { sum.innerHTML = sumCache; sum.setAttribute('data-h', sumCache); }
   }
 
   function adoptPC() {
