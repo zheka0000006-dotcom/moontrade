@@ -399,6 +399,7 @@
     '.mt-pane .mt-sw.on{background:var(--mt-grad);}',
     '.mt-pane .mt-sw.on::after{left:21px;}',
     '.mt-snd-row{display:flex;align-items:center;gap:10px;}',
+    'html.mt-nobb .mt-snd-bb,html.mt-nost .mt-snd-st{display:none!important;}',
     '.mt-snd-row label{flex:1;}',
     '.mt-snd-row button{all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;',
     'font-size:11px;color:var(--mt-moon);background:rgba(139,92,246,.12);border:1px solid var(--mt-line);}',
@@ -1666,8 +1667,8 @@
       p.innerHTML =
         '<div class="mt-h">' + T('Звук сигналів') + '</div>' +
         '<label data-s="on"><span>' + T('Звук сигналів') + '<small>' + T('Головний вимикач. Чути, навіть коли вкладка неактивна') + '</small></span><span class="mt-sw"></span></label>' +
-        '<div class="mt-snd-row"><label data-s="bb"><span>Bollinger (BB)<small>' + T('Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="bb" title="' + T('Прослухати') + '">▶</button></div>' +
-        '<div class="mt-snd-row"><label data-s="st"><span>SuperTrend + CCI<small>' + T('М’якший тембр: відкат — 2 тони, вхід — 4') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="st" title="' + T('Прослухати') + '">▶</button></div>' +
+        '<div class="mt-snd-row mt-snd-bb"><label data-s="bb"><span>Bollinger (BB)<small>' + T('Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="bb" title="' + T('Прослухати') + '">▶</button></div>' +
+        '<div class="mt-snd-row mt-snd-st"><label data-s="st"><span>SuperTrend + CCI<small>' + T('М’якший тембр: відкат — 2 тони, вхід — 4') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="st" title="' + T('Прослухати') + '">▶</button></div>' +
         '<div class="mt-snd-row"><label data-s="share"><span>' + T('Сигнали від трейдерів') + '<small>' + T('«Дінь-дон»') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="share" title="' + T('Прослухати') + '">▶</button></div>' +
         '<div class="mt-vol"><span>' + T('Гучність') + '</span><input type="range" min="5" max="100" step="5"><b></b></div>';
       p.addEventListener('click', function (e) {
@@ -1726,7 +1727,7 @@
     var groups = [], seen = {};
     CAT.forEach(function (c) { if (!seen[c.g]) { seen[c.g] = 1; groups.push(c.g); } });
     return '<option value="">' + T('— оберіть дію —') + '</option>' + groups.map(function (g) {
-      return '<optgroup label="' + g + '">' + CAT.filter(function (c) { return c.g === g; }).map(function (c) {
+      return '<optgroup label="' + g + '">' + CAT.filter(function (c) { return c.g === g && !(c.id === 'snd:bb' && !botAccess().bb) && !(c.id === 'snd:st' && !botAccess().st); }).map(function (c) {
         return '<option value="' + c.id + '"' + (c.id === sel ? ' selected' : '') + '>' + c.n + '</option>';
       }).join('') + '</optgroup>';
     }).join('');
@@ -1883,7 +1884,19 @@
     .catch(function (e) { console.error('[PO] fetch failed', e); });
 
   var pend = false;
-  function adoptAny() { if (MOBILE) adopt(); else adoptPC(); }
+  // доступ до ботів вирішує сервер (адмінка): мод програміста ховає рядки «Стратегія …» тим, у кого доступу немає.
+  // Тоді ховаємо й усе наше, що стосується ботів: звук BB / ST+CCI і відповідні дії для клавіш.
+  function botAccess() {
+    var a = $('po-toggle-scanner'), b = $('po-toggle-stcci');
+    return { bb: !!a && a.style.display !== 'none', st: !!b && b.style.display !== 'none' };
+  }
+  function syncBotAccess() {
+    var acc = botAccess(), h = document.documentElement;
+    h.classList.toggle('mt-nobb', !acc.bb);
+    h.classList.toggle('mt-nost', !acc.st);
+  }
+  setInterval(syncBotAccess, 2000);
+  function adoptAny() { syncBotAccess(); if (MOBILE) adopt(); else adoptPC(); }
   var mo = new MutationObserver(function () {
     if (pend) return;
     pend = true;
