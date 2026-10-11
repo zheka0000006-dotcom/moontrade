@@ -1792,27 +1792,33 @@
     if (!pl) return;
     var p = pl.getBoundingClientRect();
     if (p.width < 50) return;
-    var BOT_TOP = 66, GAP = 20;
+    var BOT_TOP = 66, GAP = 20, b = null;
     var right = 0;
     document.querySelectorAll('.top-left-block__block1 .items > *').forEach(function (e) {
       var r = e.getBoundingClientRect(); if (r.width > 0 && r.right > right) right = r.right;
     });
     var left = right ? right + GAP : 330;
     var bar = $('mt-bar');
-    var b = bar && !document.documentElement.classList.contains('mt-nobar') ? bar.getBoundingClientRect() : null;
+    b = bar && !document.documentElement.classList.contains('mt-nobar') ? bar.getBoundingClientRect() : null;
     if (b && b.width > 0 && b.height > 0) {
       if (b.top < BOT_TOP + 70 && b.bottom > BOT_TOP - 10 && b.right + GAP > left && b.left < left + 400) left = b.right + GAP;
     }
-    left = Math.min(left, innerWidth * 0.55);
     var hb = $('mt-hd-bot'), ht = $('mt-hd-trd');
     var wb = hb && !hb.classList.contains('mt-empty') ? hb.offsetWidth + 8 : 0;
     var wt = ht && !ht.classList.contains('mt-empty') ? ht.offsetWidth + 8 : 0;
+    var sl0 = $('po-scanner-list'), need = wb + Math.max(sl0 ? sl0.offsetWidth : 0, 250);
+    // не вміщується в рядку до правого краю графіка (вузький графік) — рядком нижче, під «Надіслати»
+    if (left + need > p.right - 8) {
+      BOT_TOP = Math.round((b && b.width > 0 ? b.bottom : BOT_TOP + 44) + 8);
+      left = b && b.width > 0 ? b.left : p.left + 16;
+    }
     var trTop = Math.round(p.top + 8), trRight = Math.round(innerWidth - p.right + 8);
     // вузький графік: картки трейдерів у тому ж рядку налізли б на картки бота — тоді ставимо їх під ними
     var sl = $('po-scanner-list'), sh = $('po-share-list');
     if (sl && sh && sl.children.length && !document.documentElement.classList.contains('mt-fold-bot')) {
       var botR = left + wb + sl.offsetWidth, trL = innerWidth - trRight - wt - Math.max(sh.offsetWidth, 230);
-      if (trL < botR + 12) trTop = Math.max(trTop, Math.round(BOT_TOP + sl.offsetHeight + 12));
+      var vOver = trTop < BOT_TOP + sl.offsetHeight + 12 && trTop + Math.max(sh.offsetHeight, 110) > BOT_TOP;
+      if (trL < botR + 12 && vOver) trTop = Math.max(trTop, Math.round(BOT_TOP + sl.offsetHeight + 12));
     }
     var v = {
       '--mt-sig-top': BOT_TOP + 'px', '--mt-hdb-l': Math.round(left) + 'px', '--mt-sig-l': Math.round(left + wb) + 'px',
