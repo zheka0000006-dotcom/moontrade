@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MoonTrade Mod
-// @version      3.1
+// @version      3.2
 // @description  MoonTrade Mod: телефон (iPhone / Android) і ПК — панель кнопок, стиль MoonTrade, чистий інтерфейс, звук і гарячі клавіші
 // @match        https://pocketoption.com/*
 // @match        https://*.pocketoption.com/*
@@ -13,6 +13,18 @@
   'use strict';
   if (window.__MT_LOADER__) return;
   window.__MT_LOADER__ = true;
+
+
+  // ---------- мова: як в інтерфейсі Pocket Option (uk / ru, інакше — en) ----------
+  var LANG = (function () {
+    var m = location.pathname.match(/^\/([a-z]{2})(?:\/|$)/i);
+    var l = ((m && m[1]) || document.documentElement.lang || '').slice(0, 2).toLowerCase();
+    return (l === 'uk' || l === 'ua') ? 'uk' : (l === 'ru' ? 'ru' : 'en');
+  })();
+  var I18N = { en: {"Сигнали": "Signals", "▾ показати": "▾ show", "Перетягніть": "Drag", "Перетягніть кнопку": "Drag the button", "Попередній актив": "Previous asset", "Наступний актив": "Next asset", "Таймфрейм і малювання": "Timeframe & drawing", "Надіслати угоду": "Share trade", "Налаштування моду": "Mod settings", "Згорнути панель": "Collapse panel", "— Горизонт.": "— Horizontal", "╱ Тренд": "╱ Trend", "▭ Прямокутник": "▭ Rectangle", "☰ Фібоначчі": "☰ Fibonacci", "↗ Промінь": "↗ Ray", "✎ Усі побудови": "✎ All drawings", "Таймфрейм": "Timeframe", "Усі ТФ": "All TF", "Малювання": "Drawing", "Стиль MoonTrade": "MoonTrade style", "Оформлення сторінки торгівлі та «Угод»": "Styling of the trading page and Trades", "Чистий інтерфейс": "Clean interface", "Сховати зайві кнопки PO": "Hide extra PO buttons", "Помножити суму": "Multiply amount", "Сьогодні": "Today", "угод": "trades", "плюс / мінус": "win / loss", "вінрейт": "win rate", "результат": "result", "Попередня група активів": "Previous asset group", "Наступна група активів": "Next asset group", "Горизонтальна лінія": "Horizontal line", "Вертикальна лінія": "Vertical line", "Промінь": "Ray", "Лінії Фібоначчі": "Fibonacci lines", "Віяло Фібоначчі": "Fibonacci fan", "Лінія тренда": "Trend line", "Паралельний канал": "Parallel channel", "Прямокутник": "Rectangle", "Вила Ендрюса": "Andrews' pitchfork", "Видалити останню побудову": "Delete last drawing", "Відкрити список таймфреймів": "Open timeframe list", "Відкрити список побудов": "Open drawings list", "Угода": "Trade", "Помножити суму на k": "Multiply amount by k", "Поділити суму на k": "Divide amount by k", "Мод": "Mod", "Надіслати сигнал": "Send signal", "Відкрити меню моду": "Open mod menu", "Звук": "Sound", "Звук сигналів увімк. / вимк.": "Signal sound on / off", "Звук BB увімк. / вимк.": "BB sound on / off", "Звук ST+CCI увімк. / вимк.": "ST+CCI sound on / off", "Звук сигналів трейдерів увімк. / вимк.": "Traders' signal sound on / off", "Інтерфейс": "Interface", "Сховати / показати картки сигналів": "Hide / show signal cards", "Сховати / показати кнопку «Надіслати»": "Hide / show the Send button", "Чистий інтерфейс увімк. / вимк.": "Clean interface on / off", "Стиль MoonTrade увімк. / вимк.": "MoonTrade style on / off", "Велика назва в хедері увімк. / вимк.": "Big header title on / off", "Пробіл": "Space", "Надіслати сигнал (поділитися угодою)": "Send signal (share trade)", "Надіслати": "Send", "Меню моду": "Mod menu", "Звук сигналів увімкнений": "Signal sound is on", "Звук сигналів вимкнений": "Signal sound is off", "онлайн": "online", "офлайн": "offline", "Мод підключений до сервера": "Mod is connected to the server", "трейдерів онлайн": "traders online", "Немає з’єднання з сервером моду": "No connection to the mod server", "Виплати": "Payouts", "Клавіші": "Hotkeys", "Кнопка «Надіслати»": "Send button", "Перетягується за ліву ручку": "Drag it by the left handle", "Повернути на місце": "Reset position", "Звук сигналів": "Signal sound", "Головний вимикач. Чути, навіть коли вкладка неактивна": "Master switch. Plays even when the tab is inactive", "Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3": "Bell: touch — 1 tone, line — 2, entry — 3", "М’якший тембр: відкат — 2 тони, вхід — 4": "Softer tone: pullback — 2 tones, entry — 4", "Сигнали від трейдерів": "Signals from traders", "«Дінь-дон»": "“Ding-dong”", "Гучність": "Volume", "Прослухати": "Listen", "Гарячі клавіші моду": "Mod hotkeys", "Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати. ↺ — повернути стандартну.": "Click the key on the right and press your own combination (Ctrl, Alt, Shift allowed). Esc — cancel. ↺ — restore default.", "Натисніть…": "Press…", "Повернути стандартну": "Restore default", "Стандартні клавіші": "Default keys", "Скинути до стандартних": "Reset to defaults", "Свої клавіші": "Custom keys", "Додайте клавішу для будь-якої дії: таймфрейми S5–D1, усі інструменти малювання, множник суми, звук, інтерфейс.": "Add a key for any action: timeframes S5–D1, all drawing tools, amount multiplier, sound, interface.", "Задати": "Set", "Видалити": "Delete", "+ Додати клавішу": "+ Add key", "— оберіть дію —": "— choose an action —"}, ru: {"Сигнали": "Сигналы", "▾ показати": "▾ показать", "Перетягніть": "Перетащите", "Перетягніть кнопку": "Перетащите кнопку", "Попередній актив": "Предыдущий актив", "Наступний актив": "Следующий актив", "Таймфрейм і малювання": "Таймфрейм и рисование", "Надіслати угоду": "Отправить сделку", "Налаштування моду": "Настройки мода", "Згорнути панель": "Свернуть панель", "— Горизонт.": "— Горизонт.", "╱ Тренд": "╱ Тренд", "▭ Прямокутник": "▭ Прямоугольник", "☰ Фібоначчі": "☰ Фибоначчи", "↗ Промінь": "↗ Луч", "✎ Усі побудови": "✎ Все построения", "Таймфрейм": "Таймфрейм", "Усі ТФ": "Все ТФ", "Малювання": "Рисование", "Стиль MoonTrade": "Стиль MoonTrade", "Оформлення сторінки торгівлі та «Угод»": "Оформление страницы торговли и «Сделок»", "Чистий інтерфейс": "Чистый интерфейс", "Сховати зайві кнопки PO": "Скрыть лишние кнопки PO", "Помножити суму": "Умножить сумму", "Сьогодні": "Сегодня", "угод": "сделок", "плюс / мінус": "плюс / минус", "вінрейт": "винрейт", "результат": "результат", "Попередня група активів": "Предыдущая группа активов", "Наступна група активів": "Следующая группа активов", "Горизонтальна лінія": "Горизонтальная линия", "Вертикальна лінія": "Вертикальная линия", "Промінь": "Луч", "Лінії Фібоначчі": "Линии Фибоначчи", "Віяло Фібоначчі": "Веер Фибоначчи", "Лінія тренда": "Линия тренда", "Паралельний канал": "Параллельный канал", "Прямокутник": "Прямоугольник", "Вила Ендрюса": "Вилы Эндрюса", "Видалити останню побудову": "Удалить последнее построение", "Відкрити список таймфреймів": "Открыть список таймфреймов", "Відкрити список побудов": "Открыть список построений", "Угода": "Сделка", "Помножити суму на k": "Умножить сумму на k", "Поділити суму на k": "Разделить сумму на k", "Мод": "Мод", "Надіслати сигнал": "Отправить сигнал", "Відкрити меню моду": "Открыть меню мода", "Звук": "Звук", "Звук сигналів увімк. / вимк.": "Звук сигналов вкл. / выкл.", "Звук BB увімк. / вимк.": "Звук BB вкл. / выкл.", "Звук ST+CCI увімк. / вимк.": "Звук ST+CCI вкл. / выкл.", "Звук сигналів трейдерів увімк. / вимк.": "Звук сигналов трейдеров вкл. / выкл.", "Інтерфейс": "Интерфейс", "Сховати / показати картки сигналів": "Скрыть / показать карточки сигналов", "Сховати / показати кнопку «Надіслати»": "Скрыть / показать кнопку «Отправить»", "Чистий інтерфейс увімк. / вимк.": "Чистый интерфейс вкл. / выкл.", "Стиль MoonTrade увімк. / вимк.": "Стиль MoonTrade вкл. / выкл.", "Велика назва в хедері увімк. / вимк.": "Большое название в шапке вкл. / выкл.", "Пробіл": "Пробел", "Надіслати сигнал (поділитися угодою)": "Отправить сигнал (поделиться сделкой)", "Надіслати": "Отправить", "Меню моду": "Меню мода", "Звук сигналів увімкнений": "Звук сигналов включён", "Звук сигналів вимкнений": "Звук сигналов выключен", "онлайн": "онлайн", "офлайн": "офлайн", "Мод підключений до сервера": "Мод подключён к серверу", "трейдерів онлайн": "трейдеров онлайн", "Немає з’єднання з сервером моду": "Нет соединения с сервером мода", "Виплати": "Выплаты", "Клавіші": "Клавиши", "Кнопка «Надіслати»": "Кнопка «Отправить»", "Перетягується за ліву ручку": "Перетаскивается за левую ручку", "Повернути на місце": "Вернуть на место", "Звук сигналів": "Звук сигналов", "Головний вимикач. Чути, навіть коли вкладка неактивна": "Главный выключатель. Слышно, даже когда вкладка неактивна", "Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3": "Колокольчик: касание — 1 тон, линия — 2, вход — 3", "М’якший тембр: відкат — 2 тони, вхід — 4": "Мягкий тембр: откат — 2 тона, вход — 4", "Сигнали від трейдерів": "Сигналы от трейдеров", "«Дінь-дон»": "«Динь-дон»", "Гучність": "Громкость", "Прослухати": "Прослушать", "Гарячі клавіші моду": "Горячие клавиши мода", "Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати. ↺ — повернути стандартну.": "Нажмите на клавишу справа и задайте свою комбинацию (можно с Ctrl, Alt, Shift). Esc — отмена. ↺ — вернуть стандартную.", "Натисніть…": "Нажмите…", "Повернути стандартну": "Вернуть стандартную", "Стандартні клавіші": "Стандартные клавиши", "Скинути до стандартних": "Сбросить к стандартным", "Свої клавіші": "Свои клавиши", "Додайте клавішу для будь-якої дії: таймфрейми S5–D1, усі інструменти малювання, множник суми, звук, інтерфейс.": "Добавьте клавишу для любого действия: таймфреймы S5–D1, все инструменты рисования, множитель суммы, звук, интерфейс.", "Задати": "Задать", "Видалити": "Удалить", "+ Додати клавішу": "+ Добавить клавишу", "— оберіть дію —": "— выберите действие —"} };
+  function T(s) { var d = I18N[LANG]; return (d && d[s]) || s; }
+  // заголовки повзунків моду різні в кожній мові
+  var HANDLE_SEL = '[title^="Перетягніть"],[title^="Перетащите"],[title^="Drag"]';
 
   var UA = navigator.userAgent || '';
   var MOBILE = /iPhone|iPod|Android.+Mobile/i.test(UA) ||
@@ -58,7 +70,7 @@
       (target || document).dispatchEvent(new MouseEvent(type, o));
     }
     document.addEventListener('touchstart', function (e) {
-      var h = e.target && e.target.closest && e.target.closest('#po-range-wrap [title^="Перетягніть"]');
+      var h = e.target && e.target.closest && e.target.closest(HANDLE_SEL.split(',').map(function (x) { return '#po-range-wrap ' + x; }).join(','));
       if (!h || e.touches.length !== 1) return;
       active = h; e.preventDefault(); fire('mousedown', e.touches[0], h);
     }, { passive: false, capture: true });
@@ -127,9 +139,9 @@
     '.mt-m #po-modal .po-toggle-row{min-height:40px;}',
     '.mt-m #po-modal .po-toggle-row > span:first-child{padding-right:12px;font-size:14px;}',
     '.mt-m #po-modal input{font-size:16px!important;}', /* без автозуму Safari */
-    '#po-range-wrap [title^="Перетягніть"]{touch-action:none;}',
-    '#po-range-wrap [title^="Перетягніть"]::before{content:"";position:absolute;left:-14px;right:-14px;top:-12px;bottom:-12px;}',
-    '.mt-m #po-range-wrap [title^="Перетягніть"]{background:#fff!important;box-shadow:0 0 0 2px rgba(139,92,246,.7);}',
+    '#po-range-wrap [title^="Перетягніть"],#po-range-wrap [title^="Перетащите"],#po-range-wrap [title^="Drag"]{touch-action:none;}',
+    '#po-range-wrap [title^="Перетягніть"]::before,#po-range-wrap [title^="Перетащите"]::before,#po-range-wrap [title^="Drag"]::before{content:"";position:absolute;left:-14px;right:-14px;top:-12px;bottom:-12px;}',
+    '.mt-m #po-range-wrap [title^="Перетягніть"],.mt-m #po-range-wrap [title^="Перетащите"],.mt-m #po-range-wrap [title^="Drag"]{background:#fff!important;box-shadow:0 0 0 2px rgba(139,92,246,.7);}',
 
     /* верхні кнопки й велика плашка — на телефоні замінені панеллю збоку */
     '.mt-m #po-top-btns{display:none!important;}',
@@ -298,7 +310,7 @@
     'html.mt-ptheme .fa,html.mt-theme .fa{font-family:FontAwesome!important;}',
     /* кнопки моду «Надіслати / МОД» і бейдж онлайну — тепер у панелі MoonTrade */
     '.mt-pc #po-online-badge{display:none!important;}',
-    '.mt-pc #po-top-btns{visibility:hidden!important;pointer-events:none!important;}',
+    '.mt-pc #po-top-btns > #po-send-btn,.mt-pc #po-top-btns > #po-settings-btn{display:none!important;}',
     '.mt-pc #mt-kchip{height:24px;padding:0 7px;margin-right:2px;font-size:11px;line-height:24px;}',
     '#mt-bar{position:fixed;left:-9999px;top:70px;z-index:11;display:flex;align-items:center;gap:6px;padding:5px 8px 5px 6px;border-radius:16px;',
     'background:rgba(22,15,43,.94);border:1px solid var(--mt-line);box-shadow:0 10px 30px rgba(0,0,0,.45);',
@@ -313,11 +325,18 @@
     '#mt-bar button.mt-send{background:var(--mt-grad);border-color:transparent;color:#fff;font-size:14px;padding:0 16px;box-shadow:0 6px 16px rgba(109,61,240,.35);}',
     '#mt-bar button.mt-send:hover{filter:brightness(1.12);}',
     '#mt-bar button.mt-off{opacity:.5;}',
-    '#mt-bar .mt-st{display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:rgba(63,224,160,.08);',
+    '#mt-fixed{display:flex;align-items:center;gap:6px;font-family:var(--mt-font);}',
+    '#mt-fixed.mt-float{position:fixed;top:11px;right:330px;z-index:12;}',
+    '#mt-fixed button{all:unset;box-sizing:border-box;height:38px;min-width:38px;padding:0 10px;border-radius:12px;display:flex;align-items:center;justify-content:center;',
+    'color:var(--mt-ink);font:700 16px/1 var(--mt-font);background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.2);cursor:pointer;transition:background .15s,transform .1s;}',
+    '#mt-fixed button:hover{background:rgba(139,92,246,.26);}',
+    '#mt-fixed button:active{transform:scale(.95);}',
+    '#mt-fixed button.mt-off{opacity:.5;}',
+    '#mt-fixed .mt-st,#mt-bar .mt-st{display:flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:12px;background:rgba(63,224,160,.08);',
     'border:1px solid rgba(63,224,160,.22);font:700 13px/1 var(--mt-font);color:var(--mt-ink);white-space:nowrap;}',
-    '#mt-bar .mt-dot{width:9px;height:9px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 8px var(--mt-rose);}',
-    '#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 8px var(--mt-mint);}',
-    '#mt-bar .mt-dot:not(.on) + span{color:var(--mt-rose);}',
+    '#mt-fixed .mt-dot,#mt-bar .mt-dot{width:9px;height:9px;border-radius:50%;background:var(--mt-rose);box-shadow:0 0 8px var(--mt-rose);}',
+    '#mt-fixed .mt-dot.on,#mt-bar .mt-dot.on{background:var(--mt-mint);box-shadow:0 0 8px var(--mt-mint);}',
+    '#mt-fixed .mt-dot:not(.on) + span{color:var(--mt-rose);}',
     'html.mt-dragging,html.mt-dragging *{cursor:grabbing!important;}',
     'html.mt-nocards #po-scanner-list,html.mt-nocards #po-share-list,html.mt-nocards #po-alerts{display:none!important;}',
 
@@ -476,13 +495,13 @@
 
     // стек карток
     var stack = el('div', { id: 'mt-stack', 'class': 'mt-empty' });
-    var head = el('button', { id: 'mt-stack-head', type: 'button', 'class': 'mt-empty' }, 'Сигнали <b id="mt-stack-n">0</b> <i id="mt-stack-arrow">▴</i>');
+    var head = el('button', { id: 'mt-stack-head', type: 'button', 'class': 'mt-empty' }, T('Сигнали') + ' <b id="mt-stack-n">0</b> <i id="mt-stack-arrow">▴</i>');
     document.documentElement.appendChild(stack);
     document.documentElement.appendChild(head);
     function syncHead() {
       var hidden = stack.classList.contains('mt-hidden');
       var a = $('mt-stack-arrow');
-      if (a) a.textContent = hidden ? '▾ показати' : '▴';
+      if (a) a.textContent = hidden ? T('▾ показати') : '▴';
     }
     if (lsGet('hideCards', false)) stack.classList.add('mt-hidden');
     syncHead();
@@ -495,24 +514,25 @@
     // панель кнопок
     var dock = el('div', { id: 'mt-dock' });
     dock.innerHTML =
-      '<div class="mt-grip mt-keep" title="Перетягніть"></div>' +
-      '<button data-a="up" aria-label="Попередній актив">▲</button>' +
-      '<button data-a="down" aria-label="Наступний актив">▼</button>' +
-      '<button data-a="tools" aria-label="Таймфрейм і малювання">⋯</button>' +
-      '<button data-a="send" class="mt-primary" aria-label="Надіслати угоду">📣</button>' +
-      '<button data-a="mod" aria-label="Налаштування моду">☰</button>' +
+      '<div class="mt-grip mt-keep" title="' + T('Перетягніть') + '"></div>' +
+      '<button data-a="up" aria-label="' + T('Попередній актив') + '">▲</button>' +
+      '<button data-a="down" aria-label="' + T('Наступний актив') + '">▼</button>' +
+      '<button data-a="tools" aria-label="' + T('Таймфрейм і малювання') + '">⋯</button>' +
+      '<button data-a="send" class="mt-primary" aria-label="' + T('Надіслати угоду') + '">📣</button>' +
+      '<button data-a="mod" aria-label="' + T('Налаштування моду') + '">☰</button>' +
       '<div class="mt-online" id="mt-online">—</div>' +
-      '<button data-a="fold" class="mt-keep" aria-label="Згорнути панель" style="height:28px">‹</button>';
+      '<button data-a="fold" class="mt-keep" aria-label="' + T('Згорнути панель') + '" style="height:28px">‹</button>';
     document.documentElement.appendChild(dock);
 
     var tools = el('div', { id: 'mt-tools' });
     var TF = ['M1', 'M2', 'M3', 'M5', 'M10', 'M15'];
-    var DR = [['Горизонтальна лінія', '— Горизонт.'], ['Лінія Тренда', '╱ Тренд'], ['Прямокутник', '▭ Прямокутник'],
-              ['Лінії Фібоначчі', '☰ Фібоначчі'], ['Промінь', '↗ Промінь'], ['__list', '✎ Усі побудови']];
-    tools.innerHTML = '<div class="mt-cap">Таймфрейм</div><div class="mt-grid">' +
+    // номер інструмента в списку PO (порядок однаковий у всіх мовах)
+    var DR = [[0, T('— Горизонт.')], [5, T('╱ Тренд')], [7, T('▭ Прямокутник')],
+              [3, T('☰ Фібоначчі')], [2, T('↗ Промінь')], ['__list', T('✎ Усі побудови')]];
+    tools.innerHTML = '<div class="mt-cap">' + T('Таймфрейм') + '</div><div class="mt-grid">' +
       TF.map(function (t) { return '<button data-tf="' + t + '">' + t + '</button>'; }).join('') +
-      '<button data-tf="all">Усі ТФ</button>' +
-      '</div><div class="mt-cap">Малювання</div><div class="mt-grid mt-draw">' +
+      '<button data-tf="all">' + T('Усі ТФ') + '</button>' +
+      '</div><div class="mt-cap">' + T('Малювання') + '</div><div class="mt-grid mt-draw">' +
       DR.map(function (d) { return '<button data-dr="' + d[0] + '">' + d[1] + '</button>'; }).join('') + '</div>';
     document.documentElement.appendChild(tools);
     function markTF(t) {
@@ -637,8 +657,7 @@
       var all = c && [].slice.call(c.querySelectorAll('*')).filter(function (e) { return e.children.length === 0 && /^(Все|All|Всё)$/.test(e.textContent.trim()); })[0];
       if (all) (all.closest('a,li,button') || all).click();
       return wait(300).then(function () {
-        var it = [].slice.call(document.querySelectorAll('.drawings-modal__item-info'))
-          .filter(function (e) { return e.textContent.trim() === name; })[0];
+        var it = document.querySelectorAll('.drawings-modal__item-info')[+name];
         if (it) it.click();
         return wait(300).then(function () { if (document.querySelector('.ReactModal__Content.DrawingsList')) poEsc(); });
       });
@@ -667,8 +686,8 @@
       box = el('div', { id: 'mt-set' });
       box.innerHTML =
         '<div class="mt-h">MoonTrade</div>' +
-        '<label data-o="theme"><span>Стиль MoonTrade<small>Оформлення сторінки торгівлі та «Угод»</small></span><span class="mt-sw"></span></label>' +
-        '<label data-o="clean"><span>Чистий інтерфейс<small>Сховати зайві кнопки PO</small></span><span class="mt-sw"></span></label>';
+        '<label data-o="theme"><span>' + T('Стиль MoonTrade') + '<small>' + T('Оформлення сторінки торгівлі та «Угод»') + '</small></span><span class="mt-sw"></span></label>' +
+        '<label data-o="clean"><span>' + T('Чистий інтерфейс') + '<small>' + T('Сховати зайві кнопки PO') + '</small></span><span class="mt-sw"></span></label>';
       var first = md.firstElementChild;
       md.insertBefore(box, first ? first.nextSibling : null);
       box.addEventListener('click', function (e) {
@@ -739,7 +758,7 @@
     if (!ctrl) return;
     var chip = $('mt-kchip');
     if (!chip) {
-      chip = el('button', { id: 'mt-kchip', type: 'button', 'aria-label': 'Помножити суму' }, '×2');
+      chip = el('button', { id: 'mt-kchip', type: 'button', 'aria-label': T('Помножити суму') }, '×2');
       chip.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); multiplyAmount(); });
     }
     var wrap = ctrl.querySelector('.control-buttons__wrapper');
@@ -809,11 +828,11 @@
     });
     var wr = (w + l) ? Math.round(w / (w + l) * 100) : 0;
     var plTxt = (pl >= 0 ? '+$' : '−$') + Math.abs(Math.round(pl * 100) / 100).toLocaleString('en-US');
-    var html = '<div class="mt-t">Сьогодні</div><div class="mt-g">' +
-      '<div><div class="mt-v">' + n + '</div><div class="mt-l">угод</div></div>' +
-      '<div><div class="mt-v"><span class="mt-up">' + w + '</span> / <span class="mt-dn">' + l + '</span></div><div class="mt-l">плюс / мінус</div></div>' +
-      '<div><div class="mt-v">' + wr + '%</div><div class="mt-l">вінрейт</div></div>' +
-      '<div><div class="mt-v ' + (pl >= 0 ? 'mt-up' : 'mt-dn') + '">' + plTxt + '</div><div class="mt-l">результат</div></div></div>';
+    var html = '<div class="mt-t">' + T('Сьогодні') + '</div><div class="mt-g">' +
+      '<div><div class="mt-v">' + n + '</div><div class="mt-l">' + T('угод') + '</div></div>' +
+      '<div><div class="mt-v"><span class="mt-up">' + w + '</span> / <span class="mt-dn">' + l + '</span></div><div class="mt-l">' + T('плюс / мінус') + '</div></div>' +
+      '<div><div class="mt-v">' + wr + '%</div><div class="mt-l">' + T('вінрейт') + '</div></div>' +
+      '<div><div class="mt-v ' + (pl >= 0 ? 'mt-up' : 'mt-dn') + '">' + plTxt + '</div><div class="mt-l">' + T('результат') + '</div></div></div>';
     return html;
   }
 
@@ -1060,42 +1079,42 @@
 
   // ---------- стандартні клавіші (як у моді) — можна перепризначити ----------
   var ACTS = [
-    { id: 'up', n: 'Попередній актив', mod: 'ArrowUp', def: ['ArrowUp'] },
-    { id: 'down', n: 'Наступний актив', mod: 'ArrowDown', def: ['ArrowDown'] },
-    { id: 'left', n: 'Попередня група активів', mod: 'ArrowLeft', def: ['ArrowLeft'] },
-    { id: 'right', n: 'Наступна група активів', mod: 'ArrowRight', def: ['ArrowRight'] },
-    { id: 'tf1', n: 'Таймфрейм M1', mod: '1', def: ['1'] },
-    { id: 'tf2', n: 'Таймфрейм M2', mod: '2', def: ['2'] },
-    { id: 'tf3', n: 'Таймфрейм M3', mod: '3', def: ['3'] },
-    { id: 'tf5', n: 'Таймфрейм M5', mod: '5', def: ['5'] },
-    { id: 'tf10', n: 'Таймфрейм M10', mod: '6', def: ['6'] },
-    { id: 'tf15', n: 'Таймфрейм M15', mod: '7', def: ['7'] },
-    { id: 'hline', n: 'Горизонтальна лінія', mod: 'l', def: ['L'] },
-    { id: 'rect', n: 'Прямокутник', mod: 'k', def: ['K'] },
-    { id: 'fib', n: 'Лінії Фібоначчі', mod: ';', def: [';'] },
-    { id: 'undo', n: 'Видалити останню побудову', mod: 'Backspace', def: ['Backspace', 'Delete'] }
+    { id: 'up', n: T('Попередній актив'), mod: 'ArrowUp', def: ['ArrowUp'] },
+    { id: 'down', n: T('Наступний актив'), mod: 'ArrowDown', def: ['ArrowDown'] },
+    { id: 'left', n: T('Попередня група активів'), mod: 'ArrowLeft', def: ['ArrowLeft'] },
+    { id: 'right', n: T('Наступна група активів'), mod: 'ArrowRight', def: ['ArrowRight'] },
+    { id: 'tf1', n: T('Таймфрейм') + ' M1', mod: '1', def: ['1'] },
+    { id: 'tf2', n: T('Таймфрейм') + ' M2', mod: '2', def: ['2'] },
+    { id: 'tf3', n: T('Таймфрейм') + ' M3', mod: '3', def: ['3'] },
+    { id: 'tf5', n: T('Таймфрейм') + ' M5', mod: '5', def: ['5'] },
+    { id: 'tf10', n: T('Таймфрейм') + ' M10', mod: '6', def: ['6'] },
+    { id: 'tf15', n: T('Таймфрейм') + ' M15', mod: '7', def: ['7'] },
+    { id: 'hline', n: T('Горизонтальна лінія'), mod: 'l', def: ['L'] },
+    { id: 'rect', n: T('Прямокутник'), mod: 'k', def: ['K'] },
+    { id: 'fib', n: T('Лінії Фібоначчі'), mod: ';', def: [';'] },
+    { id: 'undo', n: T('Видалити останню побудову'), mod: 'Backspace', def: ['Backspace', 'Delete'] }
   ];
   // ---------- каталог дій для «своїх клавіш» ----------
-  var DRAW_NAMES = ['Горизонтальна лінія', 'Вертикальна лінія', 'Промінь', 'Лінії Фібоначчі', 'Віяло Фібоначчі', 'Лінія тренда', 'Паралельний канал', 'Прямокутник', 'Вила Ендрюса'];
+  var DRAW_NAMES = ['Горизонтальна лінія', 'Вертикальна лінія', 'Промінь', 'Лінії Фібоначчі', 'Віяло Фібоначчі', 'Лінія тренда', 'Паралельний канал', 'Прямокутник', 'Вила Ендрюса'].map(T);
   var TF_ALL = ['S5', 'S10', 'S15', 'S30', 'M1', 'M2', 'M3', 'M5', 'M10', 'M15', 'M30', 'H1', 'H4', 'D1'];
   var CAT = [];
-  TF_ALL.forEach(function (t) { CAT.push({ id: 'tf:' + t, g: 'Таймфрейм', n: t, run: function () { pcTF(t); } }); });
-  CAT.push({ id: 'tf:list', g: 'Таймфрейм', n: 'Відкрити список таймфреймів', run: function () { var o = tfOpener(); if (o) o.click(); } });
-  DRAW_NAMES.forEach(function (n, i) { CAT.push({ id: 'draw:' + i, g: 'Малювання', n: n, run: function () { pcDraw(i); } }); });
-  CAT.push({ id: 'draw:list', g: 'Малювання', n: 'Відкрити список побудов', run: function () { var b = document.querySelector('.items__link--drawings'); if (b) b.click(); } });
-  CAT.push({ id: 'amt:mul', g: 'Угода', n: 'Помножити суму на k', run: function () { amountOp(0); } });
-  CAT.push({ id: 'amt:div', g: 'Угода', n: 'Поділити суму на k', run: function () { amountOp(1); } });
-  CAT.push({ id: 'mod:send', g: 'Мод', n: 'Надіслати сигнал', run: function () { var t = $('po-send-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
-  CAT.push({ id: 'mod:menu', g: 'Мод', n: 'Відкрити меню моду', run: function () { var t = $('po-settings-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
-  CAT.push({ id: 'snd:all', g: 'Звук', n: 'Звук сигналів увімк. / вимк.', run: function () { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } } });
-  CAT.push({ id: 'snd:bb', g: 'Звук', n: 'Звук BB увімк. / вимк.', run: function () { setSnd('bb', !SND.bb); } });
-  CAT.push({ id: 'snd:st', g: 'Звук', n: 'Звук ST+CCI увімк. / вимк.', run: function () { setSnd('st', !SND.st); } });
-  CAT.push({ id: 'snd:share', g: 'Звук', n: 'Звук сигналів трейдерів увімк. / вимк.', run: function () { setSnd('share', !SND.share); } });
-  CAT.push({ id: 'ui:cards', g: 'Інтерфейс', n: 'Сховати / показати картки сигналів', run: function () { toggleHtml('mt-nocards', 'noCards'); } });
-  CAT.push({ id: 'ui:bar', g: 'Інтерфейс', n: 'Сховати / показати панель MoonTrade', run: function () { toggleHtml('mt-nobar', 'noBar'); } });
-  CAT.push({ id: 'ui:clean', g: 'Інтерфейс', n: 'Чистий інтерфейс увімк. / вимк.', run: function () { OPT.clean = !OPT.clean; lsSet('clean', OPT.clean); applyOpts(); paintSettings(); } });
-  CAT.push({ id: 'ui:theme', g: 'Інтерфейс', n: 'Стиль MoonTrade увімк. / вимк.', run: function () { OPT.theme = !OPT.theme; lsSet('theme', OPT.theme); applyOpts(); paintSettings(); } });
-  CAT.push({ id: 'ui:header', g: 'Інтерфейс', n: 'Велика назва в хедері увімк. / вимк.', run: function () { var t = document.querySelector('#po-toggle-header .po-toggle') || $('po-toggle-header'); if (t) t.click(); } });
+  TF_ALL.forEach(function (t) { CAT.push({ id: 'tf:' + t, g: T('Таймфрейм'), n: t, run: function () { pcTF(t); } }); });
+  CAT.push({ id: 'tf:list', g: T('Таймфрейм'), n: T('Відкрити список таймфреймів'), run: function () { var o = tfOpener(); if (o) o.click(); } });
+  DRAW_NAMES.forEach(function (n, i) { CAT.push({ id: 'draw:' + i, g: T('Малювання'), n: n, run: function () { pcDraw(i); } }); });
+  CAT.push({ id: 'draw:list', g: T('Малювання'), n: T('Відкрити список побудов'), run: function () { var b = document.querySelector('.items__link--drawings'); if (b) b.click(); } });
+  CAT.push({ id: 'amt:mul', g: T('Угода'), n: T('Помножити суму на k'), run: function () { amountOp(0); } });
+  CAT.push({ id: 'amt:div', g: T('Угода'), n: T('Поділити суму на k'), run: function () { amountOp(1); } });
+  CAT.push({ id: 'mod:send', g: T('Мод'), n: T('Надіслати сигнал'), run: function () { var t = $('po-send-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
+  CAT.push({ id: 'mod:menu', g: T('Мод'), n: T('Відкрити меню моду'), run: function () { var t = $('po-settings-btn'); if (t) setTimeout(function () { t.click(); }, 0); } });
+  CAT.push({ id: 'snd:all', g: T('Звук'), n: T('Звук сигналів увімк. / вимк.'), run: function () { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } } });
+  CAT.push({ id: 'snd:bb', g: T('Звук'), n: T('Звук BB увімк. / вимк.'), run: function () { setSnd('bb', !SND.bb); } });
+  CAT.push({ id: 'snd:st', g: T('Звук'), n: T('Звук ST+CCI увімк. / вимк.'), run: function () { setSnd('st', !SND.st); } });
+  CAT.push({ id: 'snd:share', g: T('Звук'), n: T('Звук сигналів трейдерів увімк. / вимк.'), run: function () { setSnd('share', !SND.share); } });
+  CAT.push({ id: 'ui:cards', g: T('Інтерфейс'), n: T('Сховати / показати картки сигналів'), run: function () { toggleHtml('mt-nocards', 'noCards'); } });
+  CAT.push({ id: 'ui:bar', g: T('Інтерфейс'), n: T('Сховати / показати кнопку «Надіслати»'), run: function () { toggleHtml('mt-nobar', 'noBar'); } });
+  CAT.push({ id: 'ui:clean', g: T('Інтерфейс'), n: T('Чистий інтерфейс увімк. / вимк.'), run: function () { OPT.clean = !OPT.clean; lsSet('clean', OPT.clean); applyOpts(); paintSettings(); } });
+  CAT.push({ id: 'ui:theme', g: T('Інтерфейс'), n: T('Стиль MoonTrade увімк. / вимк.'), run: function () { OPT.theme = !OPT.theme; lsSet('theme', OPT.theme); applyOpts(); paintSettings(); } });
+  CAT.push({ id: 'ui:header', g: T('Інтерфейс'), n: T('Велика назва в хедері увімк. / вимк.'), run: function () { var t = document.querySelector('#po-toggle-header .po-toggle') || $('po-toggle-header'); if (t) t.click(); } });
   function catById(id) { for (var i = 0; i < CAT.length; i++) if (CAT[i].id === id) return CAT[i]; return null; }
 
   var KEYS = lsGet('keys', {});    // перепризначені стандартні: id -> "Alt+S" | null (вимкнено)
@@ -1114,7 +1133,7 @@
   function sigLabel(s) {
     if (!s) return '—';
     return s.replace('ArrowUp', '↑').replace('ArrowDown', '↓').replace('ArrowLeft', '←').replace('ArrowRight', '→')
-      .replace('Backspace', '⌫').replace('Delete', 'Del').replace('Space', 'Пробіл');
+      .replace('Backspace', '⌫').replace('Delete', 'Del').replace('Space', T('Пробіл'));
   }
   function effSigs(a) {
     if (Object.prototype.hasOwnProperty.call(KEYS, a.id)) return KEYS[a.id] ? [KEYS[a.id]] : [];
@@ -1170,20 +1189,27 @@
     if (!PC || $('mt-bar')) return;
     var bar = el('div', { id: 'mt-bar' });
     bar.innerHTML =
-      '<div class="mt-grip" title="Перетягніть панель"></div>' +
-      '<button type="button" data-a="send" class="mt-send" title="Надіслати сигнал (поділитися угодою)">📣 Надіслати</button>' +
-      '<button type="button" data-a="sound" class="mt-ico"></button>' +
-      '<button type="button" data-a="menu" class="mt-ico" title="Меню моду">☰</button>' +
-      '<div class="mt-st" id="mt-st"><span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span></div>';
+      '<div class="mt-grip" title="' + T('Перетягніть кнопку') + '"></div>' +
+      '<button type="button" data-a="send" class="mt-send" title="' + T('Надіслати сигнал (поділитися угодою)') + '">📣 ' + T('Надіслати') + '</button>';
     document.documentElement.appendChild(bar);
-    bar.addEventListener('click', function (e) {
-      var b = e.target.closest('button[data-a]');
-      if (!b) return;
-      e.stopPropagation();
-      var a = b.getAttribute('data-a');
-      if (a === 'sound') { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } }
-      else runAct(a === 'send' ? 'mod:send' : 'mod:menu');
+    // закріплена група в хедері: звук, меню, онлайн
+    var fx = el('div', { id: 'mt-fixed' });
+    fx.innerHTML =
+      '<button type="button" data-a="sound"></button>' +
+      '<button type="button" data-a="menu" title="' + T('Меню моду') + '">☰</button>' +
+      '<div class="mt-st" id="mt-st"><span class="mt-dot" id="mt-dot"></span><span id="mt-online">—</span></div>';
+    [bar, fx].forEach(function (box) {
+      box.addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-a]');
+        if (!b) return;
+        e.stopPropagation();
+        var a = b.getAttribute('data-a');
+        if (a === 'sound') { setSnd('on', !SND.on); if (SND.on) { ac(); tone([660, 880]); } }
+        else runAct(a === 'send' ? 'mod:send' : 'mod:menu');
+      });
     });
+    document.documentElement.appendChild(fx);
+    placeFixed();
     var grip = bar.querySelector('.mt-grip'), dx = 0, dy = 0, drag = false;
     grip.addEventListener('mousedown', function (e) {
       drag = true; var r = bar.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top;
@@ -1220,17 +1246,27 @@
     var p = lsGet('barPos', null) || barDefault();
     placeBar(p.x, p.y);
   }
+  // закріплена група стоїть у хедері на місці кнопок моду «Надіслати / МОД»
+  function placeFixed() {
+    var fx = $('mt-fixed');
+    if (!fx) return;
+    var host = $('po-top-btns');
+    // після вставки мод має заново відсунути велику назву, щоб вона не налізла на кнопки
+    if (host) { if (fx.parentNode !== host) { host.appendChild(fx); setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 50); } }
+    else if (fx.parentNode !== document.documentElement) document.documentElement.appendChild(fx);
+    fx.classList.toggle('mt-float', !host);
+  }
   function syncBar() {
-    var bar = $('mt-bar');
-    if (!bar) return;
-    var sb = bar.querySelector('[data-a="sound"]');
-    if (sb) { sb.textContent = SND.on ? '🔊' : '🔇'; sb.classList.toggle('mt-off', !SND.on); sb.title = SND.on ? 'Звук сигналів увімкнений' : 'Звук сигналів вимкнений'; }
+    if (!$('mt-bar')) return;
+    placeFixed();
+    var sb = document.querySelector('#mt-fixed [data-a="sound"]');
+    if (sb) { sb.textContent = SND.on ? '🔊' : '🔇'; sb.classList.toggle('mt-off', !SND.on); sb.title = SND.on ? T('Звук сигналів увімкнений') : T('Звук сигналів вимкнений'); }
     var on = wsOnline(), dot = $('mt-dot');
     if (dot) dot.classList.toggle('on', on);
     var oc = $('po-online-count'), mo = $('mt-online'), st = $('mt-st');
     var t = oc ? (oc.textContent || '').replace(/\s*online/i, '').trim() : '';
-    if (mo) mo.textContent = on ? (t ? t + ' онлайн' : 'онлайн') : 'офлайн';
-    if (st) st.title = on ? 'Мод підключений до сервера' + (t ? ' · трейдерів онлайн: ' + t : '') : 'Немає з’єднання з сервером моду';
+    if (mo) mo.textContent = on ? (t ? t + ' ' + T('онлайн') : T('онлайн')) : T('офлайн');
+    if (st) st.title = on ? T('Мод підключений до сервера') + (t ? ' · ' + T('трейдерів онлайн') + ': ' + t : '') : T('Немає з’єднання з сервером моду');
   }
 
   // ---------- чистий інтерфейс на ПК ----------
@@ -1280,7 +1316,7 @@
   }
 
   // ---------- меню моду на ПК: вкладки ----------
-  var TABS = [['sig', 'Сигнали'], ['pay', 'Виплати'], ['ui', 'Інтерфейс'], ['snd', 'Звук'], ['keys', 'Клавіші']];
+  var TABS = [['sig', T('Сигнали')], ['pay', T('Виплати')], ['ui', T('Інтерфейс')], ['snd', T('Звук')], ['keys', T('Клавіші')]];
   function secOf(n) {
     if (n.id === 'po-toggle-header' || n.id === 'po-toggle-hud') return 'ui';
     if (/^po-toggle-(share|scanner|stcci)$/.test(n.id) || (n.querySelector && n.querySelector('#po-nickname-input'))) return 'sig';
@@ -1320,7 +1356,7 @@
       if (set.previousSibling !== bar) md.insertBefore(set, bar.nextSibling);
       if (!set.querySelector('[data-o="barpos"]')) {
         var r = el('div', { 'class': 'mt-btnrow', 'data-o': 'barpos' },
-          '<span>Панель MoonTrade<small>Перетягується за ліву ручку</small></span><button type="button">Повернути нагору</button>');
+          '<span>' + T('Кнопка «Надіслати»') + '<small>' + T('Перетягується за ліву ручку') + '</small></span><button type="button">' + T('Повернути на місце') + '</button>');
         r.querySelector('button').addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); lsSet('barPos', null); document.documentElement.classList.remove('mt-nobar'); lsSet('noBar', false); placeBarSaved(); });
         set.appendChild(r);
       }
@@ -1340,12 +1376,12 @@
     if (!p) {
       p = el('div', { id: 'mt-snd', 'class': 'mt-pane', 'data-mt-tab': 'snd' });
       p.innerHTML =
-        '<div class="mt-h">Звук сигналів</div>' +
-        '<label data-s="on"><span>Звук сигналів<small>Головний вимикач. Чути, навіть коли вкладка неактивна</small></span><span class="mt-sw"></span></label>' +
-        '<div class="mt-snd-row"><label data-s="bb"><span>Bollinger (BB)<small>Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3</small></span><span class="mt-sw"></span></label><button type="button" data-t="bb" title="Прослухати">▶</button></div>' +
-        '<div class="mt-snd-row"><label data-s="st"><span>SuperTrend + CCI<small>М’якший тембр: відкат — 2 тони, вхід — 4</small></span><span class="mt-sw"></span></label><button type="button" data-t="st" title="Прослухати">▶</button></div>' +
-        '<div class="mt-snd-row"><label data-s="share"><span>Сигнали від трейдерів<small>«Дінь-дон»</small></span><span class="mt-sw"></span></label><button type="button" data-t="share" title="Прослухати">▶</button></div>' +
-        '<div class="mt-vol"><span>Гучність</span><input type="range" min="5" max="100" step="5"><b></b></div>';
+        '<div class="mt-h">' + T('Звук сигналів') + '</div>' +
+        '<label data-s="on"><span>' + T('Звук сигналів') + '<small>' + T('Головний вимикач. Чути, навіть коли вкладка неактивна') + '</small></span><span class="mt-sw"></span></label>' +
+        '<div class="mt-snd-row"><label data-s="bb"><span>Bollinger (BB)<small>' + T('Дзвіночок: дотик — 1 тон, лінія — 2, вхід — 3') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="bb" title="' + T('Прослухати') + '">▶</button></div>' +
+        '<div class="mt-snd-row"><label data-s="st"><span>SuperTrend + CCI<small>' + T('М’якший тембр: відкат — 2 тони, вхід — 4') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="st" title="' + T('Прослухати') + '">▶</button></div>' +
+        '<div class="mt-snd-row"><label data-s="share"><span>' + T('Сигнали від трейдерів') + '<small>' + T('«Дінь-дон»') + '</small></span><span class="mt-sw"></span></label><button type="button" data-t="share" title="' + T('Прослухати') + '">▶</button></div>' +
+        '<div class="mt-vol"><span>' + T('Гучність') + '</span><input type="range" min="5" max="100" step="5"><b></b></div>';
       p.addEventListener('click', function (e) {
         var lb = e.target.closest('label[data-s]'), tb = e.target.closest('button[data-t]');
         if (lb) { e.preventDefault(); e.stopPropagation(); var k = lb.getAttribute('data-s'); setSnd(k, !SND[k]); }
@@ -1400,7 +1436,7 @@
   function catOptions(sel) {
     var groups = [], seen = {};
     CAT.forEach(function (c) { if (!seen[c.g]) { seen[c.g] = 1; groups.push(c.g); } });
-    return '<option value="">— оберіть дію —</option>' + groups.map(function (g) {
+    return '<option value="">' + T('— оберіть дію —') + '</option>' + groups.map(function (g) {
       return '<optgroup label="' + g + '">' + CAT.filter(function (c) { return c.g === g; }).map(function (c) {
         return '<option value="' + c.id + '"' + (c.id === sel ? ' selected' : '') + '>' + c.n + '</option>';
       }).join('') + '</optgroup>';
@@ -1409,23 +1445,23 @@
   function paintKeys() {
     var p = $('mt-keys');
     if (!p) return;
-    var html = '<div class="mt-h">Гарячі клавіші моду</div><div class="mt-note">Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати. ↺ — повернути стандартну.</div>' +
+    var html = '<div class="mt-h">' + T('Гарячі клавіші моду') + '</div><div class="mt-note">' + T('Натисніть на клавішу праворуч і задайте свою комбінацію (можна з Ctrl, Alt, Shift). Esc — скасувати. ↺ — повернути стандартну.') + '</div>' +
       ACTS.map(function (a) {
         var s = effSigs(a), changed = Object.prototype.hasOwnProperty.call(KEYS, a.id);
-        var lbl = capturing === a.id ? 'Натисніть…' : (s.length ? s.map(sigLabel).join(' / ') : '—');
+        var lbl = capturing === a.id ? T('Натисніть…') : (s.length ? s.map(sigLabel).join(' / ') : '—');
         return '<div class="mt-k' + (changed ? ' mt-ch' : '') + '"><span>' + a.n + '</span>' +
           '<button type="button" class="mt-kb' + (capturing === a.id ? ' mt-wait' : '') + '" data-id="' + a.id + '">' + lbl + '</button>' +
-          '<button type="button" class="mt-kr" data-id="' + a.id + '" title="Повернути стандартну"' + (changed ? '' : ' disabled') + '>↺</button></div>';
+          '<button type="button" class="mt-kr" data-id="' + a.id + '" title="' + T('Повернути стандартну') + '"' + (changed ? '' : ' disabled') + '>↺</button></div>';
       }).join('') +
-      '<div class="mt-btnrow"><span>Стандартні клавіші</span><button type="button" data-k="all">Скинути до стандартних</button></div>' +
-      '<div class="mt-h mt-h2">Свої клавіші</div><div class="mt-note">Додайте клавішу для будь-якої дії: таймфрейми S5–D1, усі інструменти малювання, множник суми, звук, інтерфейс.</div>' +
+      '<div class="mt-btnrow"><span>' + T('Стандартні клавіші') + '</span><button type="button" data-k="all">' + T('Скинути до стандартних') + '</button></div>' +
+      '<div class="mt-h mt-h2">' + T('Свої клавіші') + '</div><div class="mt-note">' + T('Додайте клавішу для будь-якої дії: таймфрейми S5–D1, усі інструменти малювання, множник суми, звук, інтерфейс.') + '</div>' +
       CUST.map(function (c, i) {
-        var id = 'c' + i, lbl = capturing === id ? 'Натисніть…' : (c.k ? sigLabel(c.k) : 'Задати');
+        var id = 'c' + i, lbl = capturing === id ? T('Натисніть…') : (c.k ? sigLabel(c.k) : T('Задати'));
         return '<div class="mt-k mt-ck"><select data-ci="' + i + '">' + catOptions(c.a) + '</select>' +
           '<button type="button" class="mt-kb' + (capturing === id ? ' mt-wait' : '') + (c.k ? '' : ' mt-empty') + '" data-id="' + id + '">' + lbl + '</button>' +
-          '<button type="button" class="mt-kr" data-id="' + id + '" title="Видалити">×</button></div>';
+          '<button type="button" class="mt-kr" data-id="' + id + '" title="' + T('Видалити') + '">×</button></div>';
       }).join('') +
-      '<div class="mt-btnrow"><span></span><button type="button" data-k="add" class="mt-add">+ Додати клавішу</button></div>';
+      '<div class="mt-btnrow"><span></span><button type="button" data-k="add" class="mt-add">' + T('+ Додати клавішу') + '</button></div>';
     if (p.getAttribute('data-h') !== html) { p.innerHTML = html; p.setAttribute('data-h', html); }
   }
 
