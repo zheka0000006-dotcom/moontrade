@@ -522,6 +522,9 @@ h3.mt-part-h{margin-top:48px;padding-top:22px;border-top:1px solid var(--border)
 .mt-g-qs label{display:block;padding:7px 10px;margin:5px 0;border:1px solid var(--border);border-radius:10px;cursor:pointer;font-size:16px}
 .mt-g-qs label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
 .mt-g-qs input{margin-right:8px;accent-color:var(--accent-solid)}
+.mt-g-qs li.is-ok label:has(input:checked){border-color:#22c55e;background:rgba(34,197,94,.14)}
+.mt-g-qs li.is-bad label:has(input:checked){border-color:#ef4444;background:rgba(239,68,68,.14)}
+.mt-g-qs li.is-bad>p::after{content:' — перевір ще раз';color:#ef4444;font-weight:600}
 .mt-g-check{font:700 15px/1 var(--mt-body);color:#fff;background:linear-gradient(135deg,var(--accent-solid),var(--accent));border:0;border-radius:12px;padding:12px 18px;cursor:pointer}
 .mt-g-msg{color:var(--amber);font-size:15px}
 .mt-g-out code{font:700 18px/1 var(--mt-mono);color:var(--bull);background:rgba(63,224,160,.1);padding:6px 10px;border-radius:8px;user-select:all}
@@ -3438,13 +3441,20 @@ update();
     if(bar)bar.style.width=Math.round(n/all*100)+'%';
     g.querySelector('[data-step="1"]').classList.toggle('is-done',n===all);}
   document.addEventListener('change',function(e){if(e.target.matches&&e.target.matches('[data-lesson-complete]'))setTimeout(upd,0)});
-  g.addEventListener('change',function(){var all=['g1','g2','g3'].every(function(k){return g.querySelector('input[name="'+k+'"]:checked')});g.querySelector('[data-step="2"]').classList.toggle('is-done',all)});
+  g.addEventListener('change',function(e){var li=e.target.closest&&e.target.closest('.mt-g-qs>li'); if(li)li.classList.remove('is-ok','is-bad');var all=['g1','g2','g3'].every(function(k){return g.querySelector('input[name="'+k+'"]:checked')});g.querySelector('[data-step="2"]').classList.toggle('is-done',all)});
   g.querySelector('.mt-g-check').addEventListener('click',function(){
     var saved=null; try{saved=localStorage.getItem(KEY)}catch(e){} if(saved){reveal();return;}
     var n=done();
     if(n<theory.length){msg.textContent='Крок 1 ще не завершено: позначено '+n+' з '+theory.length+' уроків.';return;}
-    var ok=['g1','g2','g3'].every(function(k){var r=g.querySelector('input[name="'+k+'"]:checked');return r&&r.value==='1'});
-    if(!ok){msg.textContent='Не всі відповіді правильні. Повернись до уроків 8, 12 і 16 — і спробуй ще раз.';return;}
+    var HINT={g1:['8','chapter-05'],g2:['16','chapter-11'],g3:['12','chapter-09']}, qs=g.querySelectorAll('.mt-g-qs>li'), bad=[];
+    var empty=['g1','g2','g3'].filter(function(k){return !g.querySelector('input[name="'+k+'"]:checked')}).map(function(k){return k.slice(1)});
+    if(empty.length){msg.textContent='Обери відповідь '+(empty.length===1?'у питанні ':'у питаннях ')+empty.join(' і ')+' кроку 2 (вище, над кнопкою).';return;}
+    ['g1','g2','g3'].forEach(function(k,i){var r=g.querySelector('input[name="'+k+'"]:checked'), good=!!(r&&r.value==='1');
+      qs[i].classList.toggle('is-ok',good); qs[i].classList.toggle('is-bad',!good); if(!good)bad.push(k);});
+    if(bad.length){
+      msg.textContent=(bad.length===1?'Неправильна відповідь у питанні '+(+bad[0].slice(1))+'. Підказка в уроці ':'Неправильні відповіді в питаннях '+bad.map(function(k){return k.slice(1)}).join(' і ')+'. Підказки в уроках ');
+      bad.forEach(function(k,i){if(i)msg.appendChild(document.createTextNode(', '));var a=document.createElement('a');a.href='#'+HINT[k][1];a.textContent=HINT[k][0];msg.appendChild(a);});
+      msg.appendChild(document.createTextNode('. Зелена рамка — правильно, червона — ні.'));return;}
     msg.textContent=''; try{localStorage.setItem(KEY,'1')}catch(e){} reveal();
   });
   setTimeout(upd,0);
