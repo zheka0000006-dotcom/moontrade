@@ -1317,6 +1317,12 @@ html:not([data-theme="light"]) .dg-glow{filter:drop-shadow(0 0 6px currentColor)
       <li><h4>Закріпи іконку на панелі</h4>
         <p>Натисни на іконку пазла праворуч від адресного рядка й закріпи «User JavaScript and CSS» шпилькою. Так іконку буде завжди видно.</p>
       </li>
+      <li><h4>Дозволь скрипти користувачів</h4>
+        <p>Без цього кроку мод не запуститься. Натисни правою кнопкою на іконку розширення й вибери «Керувати розширенням» (або відкрий <code>chrome://extensions</code> і натисни «Деталі» біля «User JavaScript and CSS»). Увімкни перемикач «Дозволити скрипти користувачів».</p>
+        <p>Якщо такого перемикача немає, на сторінці <code>chrome://extensions</code> увімкни «Режим розробника» вгорі праворуч.</p>
+        <div class="mock"><div class="bar"><span class="dot"></span><span class="url">chrome://extensions › User JavaScript and CSS</span></div>
+          <div class="body" style="padding:0;gap:0;min-height:0"><div class="row"><span>Доступ до сайту</span><span class="muted">На всіх сайтах</span></div><div class="row"><span><b>Дозволити скрипти користувачів</b></span><span class="sw" style="box-shadow:0 0 0 2px #fff,0 0 0 5px #8b5cf6"></span></div><div class="row" style="border-bottom:0"><span class="muted">Закріпити на панелі інструментів</span></div></div></div>
+      </li>
       <li><h4>Відкрий Pocket Option і створи правило</h4>
         <p>Зайди на pocketoption.com у свій акаунт. Натисни на іконку розширення, потім «Add new» (Додати). Відкриється редактор правила для pocketoption.com.</p>
         <div class="mock"><div class="bar"><span class="dot"></span><span class="url">pocketoption.com/uk/cabinet/</span><span class="ico hl">JS</span></div>
@@ -1397,7 +1403,7 @@ html:not([data-theme="light"]) .dg-glow{filter:drop-shadow(0 0 6px currentColor)
     <h3>Часті питання</h3>
     <details class="faq"><summary>Мод не з'явився</summary><div>
       <p>Онови сторінку Pocket Option. Мод з'являється через кілька секунд після того, як завантажиться графік.</p>
-      <p><b>ПК:</b> перевір, що код вставлено повністю, усі чотири рядки, і правило збережене («Save»).</p>
+      <p><b>ПК:</b> перевір, що в налаштуваннях розширення увімкнено «Дозволити скрипти користувачів», код вставлено повністю, усі чотири рядки, і правило збережене («Save»).</p>
       <p><b>iPhone:</b> перевір, що Userscripts увімкнено в Парамет­рах → Safari → Розширення і дозволено для всіх вебсайтів.</p>
       <p><b>Android:</b> сайт треба відкривати у Firefox, не в Chrome.</p></div></details>
     <details class="faq"><summary>Кнопки моду подвоїлись</summary><div>
